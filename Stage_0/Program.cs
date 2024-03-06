@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Calculator
+namespace Stage_0
 {
     class Program
     {
@@ -8,7 +8,7 @@ namespace Calculator
         {
             Console.WriteLine("Hello World!");
 
-            Calculator calculator = new Calculator();
+            Calc calculator = new Calc();
             int result = calculator.Add(1, 2);
             Console.WriteLine("Result of Add(1, 2) method: " + result);
         }

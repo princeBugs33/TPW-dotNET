@@ -5,8 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Pool Game🎱" Height="675" Width="810" ResizeMode="NoResize">
     <Grid>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="620"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Margin="5, 5, 5, 5" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" >
+            <Button Content="Start" Width="50" Height="20" Margin="0,0,5,0" />
+            <Button Content="Stop" Width="50" Height="20" Margin="0,0,5,0" />
+            <TextBox Text="0" Width="20" Height="20" Margin="0,0,5,0" TextAlignment="Center" />
+        </StackPanel>
+        <Rectangle Grid.Row="1" Width="800" Height="600" Fill="LightGray" HorizontalAlignment="Left" Margin="5,0,5,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>

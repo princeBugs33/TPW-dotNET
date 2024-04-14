@@ -3,56 +3,56 @@ namespace Data
     public class Ball
     {
         private int _id;
-        private double _x;
-        private double _y;
+        private double _xPosition;
+        private double _yPosition;
         private int _radius;
         private double _xSpeed;
         private double _ySpeed;
 
         public Ball(int id, double x, double y, int radius, double xSpeed, double ySpeed)
         {
-            this.ID = id;
-            this.X = x;
-            this.Y = y;
-            this.Radius = radius;
-            this.XSpeed = xSpeed;
-            this.YSpeed = ySpeed;
+            Id = id;
+            XPosition = x;
+            YPosition = y;
+            Radius = radius;
+            XSpeed = xSpeed;
+            YSpeed = ySpeed;
         }
 
-        public int ID
+        public int Id
         {
-            get { return _id; }
-            set { _id = value; }
+            get => _id;
+            set => _id = value;
         }
 
-        public double X
+        public double XPosition
         {
-            get { return _x; }
-            set { _x = value; }
+            get => _xPosition;
+            set => _xPosition = value;
         }
 
-        public double Y
+        public double YPosition
         {
-            get { return _y; }
-            set { _y = value; }
+            get => _yPosition;
+            set => _yPosition = value;
         }
 
         public int Radius
         {
-            get { return _radius; }
-            set { _radius = value; }
+            get => _radius;
+            set => _radius = value;
         }
 
         public double XSpeed
         {
-            get { return _xSpeed; }
-            set { _xSpeed = value; }
+            get => _xSpeed;
+            set => _xSpeed = value;
         }
 
         public double YSpeed
         {
-            get { return _ySpeed; }
-            set { _ySpeed = value; }
+            get => _ySpeed;
+            set => _ySpeed = value;
         }
     }
 }

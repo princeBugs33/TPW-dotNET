@@ -1,10 +1,10 @@
 ﻿namespace Data;
 
-public class BallRepository
+public class BallRepository : IBallRepository
 {
-    private List<Ball> _balls = new();
+    private List<IBall> _balls = new();
 
-    public void AddBall(Ball ball)
+    public void AddBall(IBall ball)
     {
         _balls.Add(ball);
     }
@@ -14,7 +14,7 @@ public class BallRepository
         _balls.Clear();
     }
 
-    public List<Ball> GetBalls()
+    public List<IBall> GetBalls()
     {
         return _balls;
     }

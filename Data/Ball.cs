@@ -1,6 +1,6 @@
 namespace Data
 {
-    public class Ball
+    public class Ball : IBall
     {
         private int _id;
         private double _xPosition;

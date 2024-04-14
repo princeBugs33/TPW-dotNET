@@ -2,9 +2,9 @@
 
 namespace Logic;
 
-public class BallController
+public class BallController : IBallController
 {
-    private BallRepository _ballRepository = new();
+    private IBallRepository _ballRepository = new BallRepository();
     private int _height = 600;
     private int _width = 800;
 
@@ -52,7 +52,7 @@ public class BallController
         get => _width;
     }
     
-    public List<Ball> GetBalls()
+    public List<IBall> GetBalls()
     {
         return _ballRepository.GetBalls();
     }

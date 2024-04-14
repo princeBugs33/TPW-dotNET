@@ -4,8 +4,13 @@ public class BallRepository : IBallRepository
 {
     private List<IBall> _balls = new();
 
-    public void AddBall(IBall ball)
+    public void AddBall(IBall? ball)
     {
+        if (ball == null)
+        {
+            //exception?
+            return; 
+        }
         _balls.Add(ball);
     }
 

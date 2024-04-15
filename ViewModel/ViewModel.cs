@@ -2,9 +2,11 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using System.Xml.Resolvers;
 using Data;
 using System.Windows.Threading;
+using Model;
 
 namespace ViewModel;
 
@@ -19,8 +21,8 @@ public class ViewModel : INotifyPropertyChanged
     
 
     //public ObservableCollection<Ball> Balls { get; set; }
-    public List<Ball> _balls;
     private String _textBoxColor;
+    private ModelMain _modelMain;
     private String _numberOfBalls;
     public ICommand _start { get; }
     public ICommand _stop { get; }
@@ -28,16 +30,17 @@ public class ViewModel : INotifyPropertyChanged
     private bool _isStopEnable;
     private bool _isTextFieldEnable;
     private DispatcherTimer _timer;
+    private int _width = 800;
+    private int _height = 600;
+    
 
     public ViewModel()
     {
-        //_numberOfBalls = "2";
-        //_textBoxColor = "Black";
-        NumberOfBalls = "2";
         TextBoxColor = "Green";
         _start = new RelayCommand(Start);
         _stop = new RelayCommand(Stop);
-        _balls = new();
+        _modelMain = new ModelMain(_width, _height);
+        _numberOfBalls = "5";
 
         IsStartEnable = true;
         IsStopEnable = false;
@@ -51,8 +54,7 @@ public class ViewModel : INotifyPropertyChanged
     
     private void Timer_Tick(object sender, EventArgs e)
     {
-        //UpdateBalls();
-        MoveBalls();
+        _modelMain.MoveBalls();
         OnPropertyChanged("Balls");
     }
 
@@ -61,7 +63,7 @@ public class ViewModel : INotifyPropertyChanged
         IsStartEnable = false;
         IsStopEnable = true;
         IsTextFieldEnable = false;
-        UpdateBalls();
+        _modelMain.GenerateBalls(int.Parse(NumberOfBalls));
         _timer.Start();
     }
 
@@ -70,50 +72,14 @@ public class ViewModel : INotifyPropertyChanged
         IsStartEnable = true;
         IsStopEnable = false;
         IsTextFieldEnable = true;
-        _balls.Clear();
         _timer.Stop();
-    }
-    
-    private void MoveBalls()
-    {
-        foreach (var ball in _balls)
-        {
-            if (ball.XPosition + ball.XSpeed - ball.Radius <= 0 || ball.XPosition + ball.XSpeed + ball.Radius >= 800)
-            {
-                ball.XSpeed *= -1;
-            }
-            if (ball.YPosition + ball.YSpeed - ball.Radius <= 0 || ball.YPosition + ball.YSpeed + ball.Radius >= 600)
-            {
-                ball.YSpeed *= -1;
-            }
-
-            ball.XPosition += ball.XSpeed;
-            ball.YPosition += ball.YSpeed;
-        }
-    }
-    
-    private void UpdateBalls()
-    {
-        _balls.Clear();
-        Random random = new Random();
-        for (int i = 0; i < int.Parse(NumberOfBalls); i++)
-        {
-            _balls.Add(new Ball(i, 
-                random.Next(0, 800), 
-                random.Next(0, 600), 
-                40,
-                random.NextDouble() + random.Next(-2, 2), 
-                random.NextDouble() + random.Next(-2, 2)));
-            
-            
-            
-        }
+        _modelMain.ClearBalls();
         OnPropertyChanged("Balls");
-        
     }
-    public Ball[]? Balls
+    
+    public IBall[]? Balls
     {
-        get => _balls.ToArray();
+        get => _modelMain.GetBalls().ToArray();
     }
     
     public string TextBoxColor
@@ -146,8 +112,6 @@ public class ViewModel : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    
-    
 
     public bool IsStartEnable
     {

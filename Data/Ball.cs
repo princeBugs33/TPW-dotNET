@@ -5,16 +5,16 @@ namespace Data
         private int _id;
         private double _xPosition;
         private double _yPosition;
-        private int _radius;
+        private int _diameter;
         private double _xSpeed;
         private double _ySpeed;
 
-        public Ball(int id, double x, double y, int radius, double xSpeed, double ySpeed)
+        public Ball(int id, double x, double y, int diameter, double xSpeed, double ySpeed)
         {
             Id = id;
             XPosition = x;
             YPosition = y;
-            Radius = radius;
+            Diameter = diameter;
             XSpeed = xSpeed;
             YSpeed = ySpeed;
         }
@@ -37,10 +37,10 @@ namespace Data
             set => _yPosition = value;
         }
 
-        public int Radius
+        public int Diameter
         {
-            get => _radius;
-            set => _radius = value;
+            get => _diameter;
+            set => _diameter = value;
         }
 
         public double XSpeed

@@ -19,7 +19,7 @@ public class BallTest
         Assert.Equal(1, ball.Id);
         Assert.Equal(5.0, ball.XPosition);
         Assert.Equal(7.0, ball.YPosition);
-        Assert.Equal(10, ball.Radius);
+        Assert.Equal(10, ball.Diameter);
         Assert.Equal(2.0, ball.XSpeed);
         Assert.Equal(3.0, ball.YSpeed);
     }
@@ -57,8 +57,8 @@ public class BallTest
     [Fact]
     public void BallRadiusTest()
     {
-        Assert.Equal(10, _ball.Radius);
-        _ball.Radius = 1;
-        Assert.Equal(1, _ball.Radius);
+        Assert.Equal(10, _ball.Diameter);
+        _ball.Diameter = 1;
+        Assert.Equal(1, _ball.Diameter);
     }
 }

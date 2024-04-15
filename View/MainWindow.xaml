@@ -16,17 +16,7 @@
             <Button Content="Stop" Width="50" Height="20" Margin="0,0,5,0" Command="{Binding _stop}" IsEnabled="{Binding IsStopEnable}"/>
             <TextBox Text="{Binding NumberOfBalls, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding TextBoxColor}" Width="20" Height="20" Margin="0,0,5,0" TextAlignment="Center" IsEnabled="{Binding IsTextFieldEnable}"/>
         </StackPanel>
-        <!-- <Canvas Grid.Row="1" Width="800" Height="600" Background="LightGray" HorizontalAlignment="Center" Margin="5,0,5,0" VerticalAlignment="Top"> -->
-        <!--      -->
-        <!-- </Canvas> -->
         <Canvas Grid.Row="1" Width="800" Height="600" Background="LightGray" HorizontalAlignment="Center" >
-            <!-- <Rectangle Fill="LightBlue"  -->
-            <!--            Width="100"  -->
-            <!--            Height="50"  -->
-            <!--               Canvas.Left="12" -->
-            <!--                 Canvas.Top="120" -->
-            <!--            /> -->
-                
             <ItemsControl ItemsSource="{Binding Balls}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -41,7 +31,7 @@
                 </ItemsControl.ItemContainerStyle>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Ellipse   Width="{Binding Radius}" Height="{Binding Radius}"> 
+                        <Ellipse   Width="{Binding Diameter}" Height="{Binding Diameter}"> 
                             <Ellipse.Fill>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                     <GradientStop Color="Black" Offset="0" />

@@ -5,40 +5,71 @@ namespace Logic;
 public class BallController : IBallController
 {
     private IBallRepository _ballRepository = new BallRepository();
-    private int _height = 600;
-    private int _width = 800;
+    private int _width;
+    private int _height;
+    
+
+    public BallController(int width, int height)
+    {
+        _width = width;
+        _height = height;
+    }
 
     public void GenerateBalls(int number)
     {
         var random = new Random();
-        const int radius = 15;
+        int diameter = 40;
         for (var i = 0; i < number; i++)
         {
             
             var x = random.Next(2) * 2 - 1;
             var y = random.Next(2) * 2 - 1;
-            Console.WriteLine(x + " " + y);
-            _ballRepository.AddBall(new Ball(i, (double)random.Next(0 + radius, _width - radius),
-                (double)random.Next(0 + radius, _height - radius), radius,
-                random.NextDouble() + (double)random.Next(-2, 2), random.NextDouble() + (double)random.Next(-2, 2)));
+            _ballRepository.AddBall(new Ball(
+                i, 
+                (double)random.Next(0, _width - diameter),
+                (double)random.Next(0, _height - diameter), 
+                diameter,
+                random.NextDouble() + (double)random.Next(-2, 2), 
+                random.NextDouble() + (double)random.Next(-2, 2))
+            );
         }
     }
-
+    
     public void MoveBalls()
     {
         foreach (var ball in GetBalls())
         {
-            if (ball.XPosition + ball.XSpeed - ball.Radius <= 0 || ball.XPosition + ball.XSpeed + ball.Radius >= Width)
+            var newXPosition = ball.XPosition + ball.XSpeed;
+            if (newXPosition <= 0)
             {
+                ball.XPosition = 0;
+                ball.XSpeed *= -1;
+            } 
+            else if (newXPosition + ball.Diameter >= 800)
+            {
+                ball.XPosition = 800 - ball.Diameter;
                 ball.XSpeed *= -1;
             }
-            if (ball.YPosition + ball.YSpeed - ball.Radius <= 0 || ball.YPosition + ball.YSpeed + ball.Radius >= Height)
+            else
             {
-                ball.YSpeed *= -1;
+                ball.XPosition = newXPosition;
             }
 
-            ball.XPosition += ball.XSpeed;
-            ball.YPosition += ball.YSpeed;
+            var newYPosition = ball.YPosition + ball.YSpeed;
+            if (newYPosition <= 0)
+            {
+                ball.YPosition = 0;
+                ball.YSpeed *= -1;
+            } 
+            else if (newYPosition + ball.Diameter >= 600)
+            {
+                ball.YPosition = 600 - ball.Diameter;
+                ball.YSpeed *= -1;
+            }
+            else
+            {
+                ball.YPosition = newYPosition; 
+            }
         }
     }
 

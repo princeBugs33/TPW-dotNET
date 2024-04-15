@@ -16,7 +16,7 @@ public class LogicTest
     [Fact]
     public void LogicRepositoryTest()
     {
-        BallController ballController = new BallController();
+        BallController ballController = new BallController(800, 600);
         
         ballController.GenerateBalls(10);
 
@@ -28,21 +28,6 @@ public class LogicTest
             Assert.True(ball.XPosition < ballController.Width);
             Assert.True(ball.YPosition > 0);
             Assert.True(ball.YPosition < ballController.Height);
-        }
-    }
-    
-    // move "test" simulation
-    [Fact]
-    public void LogicMoveTest()
-    {
-        BallController ballController = new BallController();
-        
-        ballController.GenerateBalls(1);
-
-        for (int i = 0; i < 5000; i++)
-        {
-            ballController.MoveBalls();
-            _testOutputHelper.WriteLine(ballController.GetBalls().First().XPosition + " " + ballController.GetBalls().First().YPosition + " " + ballController.GetBalls().First().XSpeed + " " + ballController.GetBalls().First().YSpeed);
         }
     }
 }

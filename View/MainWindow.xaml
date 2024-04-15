@@ -16,8 +16,35 @@
             <Button Content="Stop" Width="50" Height="20" Margin="0,0,5,0" Command="{Binding _stop}" IsEnabled="{Binding IsStopEnable}"/>
             <TextBox Text="{Binding NumberOfBalls, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding TextBoxColor}" Width="20" Height="20" Margin="0,0,5,0" TextAlignment="Center" IsEnabled="{Binding IsTextFieldEnable}"/>
         </StackPanel>
-        <Canvas Grid.Row="1" Width="800" Height="600" Background="LightGray" HorizontalAlignment="Center" Margin="5,0,5,0" VerticalAlignment="Top">
-            
+        <!-- <Canvas Grid.Row="1" Width="800" Height="600" Background="LightGray" HorizontalAlignment="Center" Margin="5,0,5,0" VerticalAlignment="Top"> -->
+        <!--      -->
+        <!-- </Canvas> -->
+        <Canvas Grid.Row="1" Width="800" Height="600" Background="LightGray" HorizontalAlignment="Center" Margin="5,0,5,0">
+            <!-- <Rectangle Fill="LightBlue"  -->
+            <!--            Width="100"  -->
+            <!--            Height="50"  -->
+            <!--               Canvas.Left="12" -->
+            <!--                 Canvas.Top="120" -->
+            <!--            /> -->
+                
+            <ItemsControl ItemsSource="{Binding Balls}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Canvas.Left" Value="{Binding XPosition}" />
+                        <Setter Property="Canvas.Top" Value="{Binding YPosition}" />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Ellipse Fill="Black" Width="{Binding Radius}" Height="{Binding Radius}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </Canvas>
     </Grid>
 </Window>

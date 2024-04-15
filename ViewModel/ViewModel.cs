@@ -1,7 +1,9 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Xml.Resolvers;
+using Data;
 
 namespace ViewModel;
 
@@ -14,6 +16,7 @@ public class ViewModel : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
+    public ObservableCollection<Ball> Balls { get; set; }
     private String _textBoxColor;
     private String _numberOfBalls;
     public ICommand _start { get; }
@@ -30,10 +33,12 @@ public class ViewModel : INotifyPropertyChanged
         TextBoxColor = "Green";
         _start = new RelayCommand(Start);
         _stop = new RelayCommand(Stop);
+        Balls = new ObservableCollection<Ball>();
 
         IsStartEnable = true;
         IsStopEnable = false;
         IsTextFieldEnable = true;
+        
     }
 
     public void Start()
@@ -41,6 +46,7 @@ public class ViewModel : INotifyPropertyChanged
         IsStartEnable = false;
         IsStopEnable = true;
         IsTextFieldEnable = false;
+        UpdateBalls();
     }
 
     public void Stop()
@@ -48,6 +54,24 @@ public class ViewModel : INotifyPropertyChanged
         IsStartEnable = true;
         IsStopEnable = false;
         IsTextFieldEnable = true;
+        Balls.Clear();
+    }
+    
+    private void UpdateBalls()
+    {
+        Balls.Clear();
+        Random random = new Random();
+        for (int i = 0; i < int.Parse(NumberOfBalls); i++)
+        {
+            Balls.Add(new Ball(i, 
+                random.Next(0, 800), 
+                random.Next(0, 600), 
+                random.Next(10, 20),
+                random.NextDouble() + random.Next(-2, 2), 
+                random.NextDouble() + random.Next(-2, 2)));
+            
+        }
+        OnPropertyChanged("Balls"); // Notify UI about Balls collection change
     }
     
     

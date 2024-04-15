@@ -41,7 +41,14 @@
                 </ItemsControl.ItemContainerStyle>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Ellipse Fill="Black" Width="{Binding Radius}" Height="{Binding Radius}" />
+                        <Ellipse   Width="{Binding Radius}" Height="{Binding Radius}"> 
+                            <Ellipse.Fill>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="Black" Offset="0" />
+                                    <GradientStop Color="DarkSlateGray" Offset="1" />
+                                </LinearGradientBrush>
+                            </Ellipse.Fill>
+                        </Ellipse>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

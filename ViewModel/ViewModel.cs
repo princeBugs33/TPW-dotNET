@@ -14,6 +14,7 @@ public class ViewModel : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
+    private String _textBoxColor;
     private String _numberOfBalls;
     public ICommand _start { get; }
     public ICommand _stop { get; }
@@ -23,7 +24,10 @@ public class ViewModel : INotifyPropertyChanged
 
     public ViewModel()
     {
-        _numberOfBalls = "";
+        //_numberOfBalls = "2";
+        //_textBoxColor = "Black";
+        NumberOfBalls = "2";
+        TextBoxColor = "Green";
         _start = new RelayCommand(Start);
         _stop = new RelayCommand(Stop);
 
@@ -46,12 +50,34 @@ public class ViewModel : INotifyPropertyChanged
         IsTextFieldEnable = true;
     }
     
+    
+    public string TextBoxColor
+    {
+        get { return _textBoxColor; }
+        set
+        {
+            _textBoxColor = value;
+            OnPropertyChanged(nameof(TextBoxColor));
+        }
+    }
+    
     public string NumberOfBalls
     {
         get => _numberOfBalls;
         set
         {
             _numberOfBalls = value;
+            //check whether the value is a number and is greater than 0 and less than 100 and only allow start 
+            if (int.TryParse(value, out int number) && number > 0 && number < 100)
+            {
+                IsStartEnable = true;
+                TextBoxColor = "Green";
+            }
+            else
+            {
+                IsStartEnable = false;
+                TextBoxColor = "Red";
+            }
             OnPropertyChanged();
         }
     }

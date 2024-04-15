@@ -5,17 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:View"
         mc:Ignorable="d"
-        Title="Pool Game🎱" Height="675" Width="810" ResizeMode="CanMinimize">
+        Title="Pool Game🎱" Height="675" Width="820" ResizeMode="CanMinimize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="620"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Margin="5, 5, 5, 5" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" >
+        <StackPanel Grid.Row="0" Margin="5, 5, 5, 5" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" >
             <Button Content="Start" Width="50" Height="20" Margin="0,0,5,0" Command="{Binding _start}" IsEnabled="{Binding IsStartEnable}"/>
             <Button Content="Stop" Width="50" Height="20" Margin="0,0,5,0" Command="{Binding _stop}" IsEnabled="{Binding IsStopEnable}"/>
-            <TextBox Text="{Binding NumberOfBalls}" Width="20" Height="20" Margin="0,0,5,0" TextAlignment="Center" IsEnabled="{Binding IsTextFieldEnable}"/>
+            <TextBox Text="{Binding NumberOfBalls, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding TextBoxColor}" Width="20" Height="20" Margin="0,0,5,0" TextAlignment="Center" IsEnabled="{Binding IsTextFieldEnable}"/>
         </StackPanel>
-        <Rectangle Grid.Row="1" Width="800" Height="600" Fill="LightGray" HorizontalAlignment="Left" Margin="5,0,5,0" VerticalAlignment="Top"/>
+        <Canvas Grid.Row="1" Width="800" Height="600" Background="LightGray" HorizontalAlignment="Center" Margin="5,0,5,0" VerticalAlignment="Top">
+            
+        </Canvas>
     </Grid>
 </Window>

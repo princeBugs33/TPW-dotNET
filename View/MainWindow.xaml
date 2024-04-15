@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:View"
         mc:Ignorable="d"
-        Title="Pool Game🎱" Height="675" Width="820" ResizeMode="CanMinimize">
+        Title="Pool Game🎱" Height="680" Width="820" ResizeMode="CanMinimize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>

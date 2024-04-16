@@ -14,7 +14,8 @@ public class LogicTest
     {
         int numberOfBalls = 5;
         int diameter = 40;
-        BallController ballController = new BallController(width, height);
+        IBallRepository ballRepository = new BallRepository();
+        BallController ballController = new BallController(ballRepository, width, height);
 
         ballController.GenerateBalls(numberOfBalls);
         List<IBall> balls = ballController.GetBalls();
@@ -33,7 +34,8 @@ public class LogicTest
     [Fact]
     public void TestMoveBallsDirection()
     {
-        BallController ballController = new BallController(width, height);
+        IBallRepository ballRepository = new BallRepository();
+        BallController ballController = new BallController(ballRepository, width, height);
         ballController.GenerateBalls(1);
         IBall ball = ballController.GetBalls()[0];
 
@@ -48,7 +50,8 @@ public class LogicTest
     [Fact]
     public void TestMoveBallsBoundaryUpperLeftCorner()
     {
-        BallController ballController = new BallController(width, height);
+        IBallRepository ballRepository = new BallRepository();
+        BallController ballController = new BallController(ballRepository, width, height);
         ballController.GenerateBalls(1);
         IBall ball = ballController.GetBalls()[0];
 
@@ -68,7 +71,8 @@ public class LogicTest
     [Fact]
     public void TestMoveBallsBoundaryLowerRightCorner()
     {
-        BallController ballController = new BallController(width, height);
+        IBallRepository ballRepository = new BallRepository();
+        BallController ballController = new BallController(ballRepository, width, height);
         ballController.GenerateBalls(1);
         IBall ball = ballController.GetBalls()[0];
 
@@ -89,7 +93,8 @@ public class LogicTest
     public void TestClearBalls()
     {
         int numberOfBalls = 5;
-        BallController ballController = new BallController(width, height);
+        IBallRepository ballRepository = new BallRepository();
+        BallController ballController = new BallController(ballRepository, width, height);
         ballController.GenerateBalls(numberOfBalls);
 
         ballController.ClearBalls();
@@ -102,7 +107,8 @@ public class LogicTest
     public void TestGetBalls()
     {
         int numberOfBalls = 5;
-        BallController ballController = new BallController(width, height);
+        IBallRepository ballRepository = new BallRepository();
+        BallController ballController = new BallController(ballRepository, width, height);
         ballController.GenerateBalls(numberOfBalls);
 
         List<IBall> balls = ballController.GetBalls();

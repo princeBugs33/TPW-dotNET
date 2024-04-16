@@ -4,13 +4,14 @@ namespace Logic;
 
 public class BallController : IBallController
 {
-    private IBallRepository _ballRepository = new BallRepository();
+    private IBallRepository _ballRepository;
     private int _width;
     private int _height;
     
 
-    public BallController(int width, int height)
+    public BallController(IBallRepository ballRepository, int width, int height)
     {
+        _ballRepository = ballRepository;
         _width = width;
         _height = height;
     }

@@ -12,8 +12,8 @@
             <RowDefinition Height="620"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Margin="5, 5, 5, 5" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" >
-            <Button Content="Start" Width="50" Height="20" Margin="0,0,5,0" Command="{Binding _start}" IsEnabled="{Binding IsStartEnable}"/>
-            <Button Content="Stop" Width="50" Height="20" Margin="0,0,5,0" Command="{Binding _stop}" IsEnabled="{Binding IsStopEnable}"/>
+            <Button Content="Start" Width="50" Height="20" Margin="0,0,5,0" Command="{Binding StartCommand}" IsEnabled="{Binding IsStartEnable}"/>
+            <Button Content="Stop" Width="50" Height="20" Margin="0,0,5,0" Command="{Binding StopCommand}" IsEnabled="{Binding IsStopEnable}"/>
             <TextBox Text="{Binding NumberOfBalls, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding TextBoxColor}" Width="20" Height="20" Margin="0,0,5,0" TextAlignment="Center" IsEnabled="{Binding IsTextFieldEnable}"/>
         </StackPanel>
         <Canvas Grid.Row="1" Width="800" Height="600" Background="LightGray" HorizontalAlignment="Center" >

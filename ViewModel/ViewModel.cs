@@ -24,8 +24,8 @@ public class ViewModel : INotifyPropertyChanged
     private String _textBoxColor;
     private ModelMain _modelMain;
     private String _numberOfBalls;
-    public ICommand _start { get; }
-    public ICommand _stop { get; }
+    public ICommand StartCommand { get; }
+    public ICommand StopCommand { get; }
     private bool _isStartEnable;
     private bool _isStopEnable;
     private bool _isTextFieldEnable;
@@ -37,8 +37,8 @@ public class ViewModel : INotifyPropertyChanged
     public ViewModel()
     {
         TextBoxColor = "Green";
-        _start = new RelayCommand(Start);
-        _stop = new RelayCommand(Stop);
+        StartCommand = new RelayCommand(Start, () => IsStartEnable);
+        StopCommand = new RelayCommand(Stop, () => IsStopEnable);
         _modelMain = new ModelMain(_width, _height);
         _numberOfBalls = "5";
 
@@ -47,7 +47,7 @@ public class ViewModel : INotifyPropertyChanged
         IsTextFieldEnable = true;
         
         _timer = new DispatcherTimer();
-        _timer.Interval = TimeSpan.FromMilliseconds(10); // Set the interval to 10 seconds
+        _timer.Interval = TimeSpan.FromMilliseconds(10);
         _timer.Tick += Timer_Tick;
         
     }
@@ -84,7 +84,7 @@ public class ViewModel : INotifyPropertyChanged
     
     public string TextBoxColor
     {
-        get { return _textBoxColor; }
+        get => _textBoxColor;
         set
         {
             _textBoxColor = value;
@@ -98,7 +98,6 @@ public class ViewModel : INotifyPropertyChanged
         set
         {
             _numberOfBalls = value;
-            //check whether the value is a number and is greater than 0 and less than 100 and only allow start 
             if (int.TryParse(value, out int number) && number > 0 && number < 100)
             {
                 IsStartEnable = true;
@@ -112,7 +111,7 @@ public class ViewModel : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-
+    
     public bool IsStartEnable
     {
         get => _isStartEnable;
@@ -122,7 +121,7 @@ public class ViewModel : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    
+
     public bool IsStopEnable
     {
         get => _isStopEnable;

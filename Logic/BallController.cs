@@ -18,52 +18,60 @@ public class BallController : IBallController
 
     public void GenerateBalls(int number)
     {
-        //////
-        // TODO naprawić generowanie kul tak aby nie nakładały się na siebie
-        //
-        // var random = new Random();
-        // int diameter = 40;
-        // for (var i = 0; i < number; i++)
-        // {
-        //     
-        //     //var x = random.Next(2) * 2 - 1;
-        //     //var y = random.Next(2) * 2 - 1;
-        //     _ballRepository.AddBall(new Ball(
-        //         i, 
-        //         (double)random.Next(0, _width - diameter),
-        //         (double)random.Next(0, _height - diameter), 
-        //         diameter,
-        //         random.NextDouble() + (double)random.Next(-2, 2), 
-        //         random.NextDouble() + (double)random.Next(-2, 2))
-        //     );
-        // }
-        //requires further improvemnt
         var random = new Random();
+
+        // variable ball size
+        /*int diameterMin = 20;
+        int diameterMax = 40;
+
+        int gridWidth = _width / diameterMax + 1;
+        int gridHeight = _height / diameterMax + 1;*/
+
+        // fixed ball size
         int diameter = 40;
+
         int gridWidth = _width / diameter + 1;
         int gridHeight = _height / diameter + 1;
+
         double mass = 2;
+
+        List<(int, int)> coordinates = new List<(int, int)>();
+
+        for (int x = 0; x < gridWidth; x++)
+        {
+            for (int y = 0; y < gridHeight; y++)
+            {
+                coordinates.Add((x, y));
+            }
+        }
+
+        coordinates = coordinates.OrderBy(x => Random.Shared.Next()).ToList();
 
         for (var i = 0; i < number; i++)
         {
-            int gridX = random.Next(gridWidth);
-            int gridY = random.Next(gridHeight);
+            var (gridX, gridY) = coordinates[i];
 
+
+
+            // fixed ball size
             double x = gridX * diameter;
             double y = gridY * diameter;
 
+            // variable ball size
+            /*int diameter = random.Next(diameterMin, diameterMax + 1);
+            double x = gridX * diameterMax + random.NextDouble() * (diameterMax - diameter);
+            double y = gridY * diameterMax + random.NextDouble() * (diameterMax - diameter);*/
+
             _ballRepository.AddBall(new Ball(
-                i, 
+                i,
                 x,
-                y, 
+                y,
                 diameter,
-                random.NextDouble() + (double)random.Next(-1, 1), 
+                random.NextDouble() + (double)random.Next(-1, 1),
                 random.NextDouble() + (double)random.Next(-1, 1),
                 mass)
-                
             );
         }
-        
     }
     
     public void MoveBalls()

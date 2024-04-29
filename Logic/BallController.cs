@@ -161,6 +161,7 @@ public class BallController : IBallController
                     otherBall.XSpeed = newOtherBallXSpeed;
                     otherBall.YSpeed = newOtherBallYSpeed;
                     
+                    // Napraw nakładanie się kul
                     double overlap = ball.Diameter / 2 + otherBall.Diameter / 2 - distance;
                     newXPosition += overlap * Math.Cos(angle);
                     newYPosition += overlap * Math.Sin(angle);
@@ -169,7 +170,7 @@ public class BallController : IBallController
             }
             
             //////
-            // Trzecia implementacja kolizji, uwzględnia masę, problem z blokującymi się kulami
+            // Trzecia implementacja kolizji, uwzględnia masę, problem z blokującymi się kulami (chyba fixed??)
             //
             // foreach (var otherBall in GetBalls())
             // {
@@ -229,6 +230,11 @@ public class BallController : IBallController
             //         ball.YSpeed = newBallYSpeed;
             //         otherBall.XSpeed = newOtherBallXSpeed;
             //         otherBall.YSpeed = newOtherBallYSpeed;
+            //
+            //         // Napraw nakładanie się kul
+            //         double overlap = ball.Diameter / 2 + otherBall.Diameter / 2 - distance;
+            //         newXPosition += overlap * Math.Cos(angle);
+            //         newYPosition += overlap * Math.Sin(angle);
             //     }
             // }
 

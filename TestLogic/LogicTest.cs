@@ -9,6 +9,7 @@ public class LogicTest
     int width = 800;
     int height = 600;
     
+    // TODO nie przechodzi, najprawdopodobniej z powodu zmian w generatorze kul na planszy 
     [Fact]
     public void TestGenerateBalls()
     {

@@ -8,8 +8,9 @@ namespace Data
         private int _diameter;
         private double _xSpeed;
         private double _ySpeed;
+        private double _mass;
 
-        public Ball(int id, double x, double y, int diameter, double xSpeed, double ySpeed)
+        public Ball(int id, double x, double y, int diameter, double xSpeed, double ySpeed, double mass)
         {
             Id = id;
             XPosition = x;
@@ -17,6 +18,7 @@ namespace Data
             Diameter = diameter;
             XSpeed = xSpeed;
             YSpeed = ySpeed;
+            Mass = mass;
         }
 
         public int Id
@@ -53,6 +55,12 @@ namespace Data
         {
             get => _ySpeed;
             set => _ySpeed = value;
+        }
+        
+        public double Mass
+        {
+            get => _mass;
+            set => _mass = value;
         }
         
         

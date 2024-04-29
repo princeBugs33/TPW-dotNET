@@ -5,16 +5,17 @@ namespace TestData;
 public class BallTest
 {
     private IBall _ball;
+    private double _mass = 1.0;
     
     public BallTest()
     {
-        _ball = new Ball(1, 5.0, 7.0, 10, 2.0, 3.0);
+        _ball = new Ball(1, 5.0, 7.0, 10, 2.0, 3.0, _mass);
     }
     
     [Fact]
     public void BallInitializationTest()
     {
-        IBall ball = new Ball(1, 5.0, 7.0, 10, 2.0, 3.0);
+        IBall ball = new Ball(1, 5.0, 7.0, 10, 2.0, 3.0, _mass);
         
         Assert.Equal(1, ball.Id);
         Assert.Equal(5.0, ball.XPosition);

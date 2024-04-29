@@ -7,5 +7,6 @@ public interface IBall
     double YPosition { get; set; } 
     int Diameter { get; set; }
     double XSpeed { get; set; }
-    public double YSpeed { get; set; }
+    double YSpeed { get; set; }
+    double Mass { get; set; }
 }

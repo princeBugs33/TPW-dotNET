@@ -1,4 +1,5 @@
 ﻿using Data;
+using System.Diagnostics;
 
 namespace Logic;
 
@@ -73,7 +74,7 @@ public class BallController : IBallController
             );
         }
     }
-    
+
     public void MoveBalls()
     {
         
@@ -81,62 +82,8 @@ public class BallController : IBallController
         {
             var newXPosition = ball.XPosition + ball.XSpeed;
             var newYPosition = ball.YPosition + ball.YSpeed;
+
             
-            ////////
-            // Pierwsza implemntacja kolizji, problem z nakładaniem się kul
-            //
-            // foreach (var otherBall in GetBalls())
-            // {
-            //     if (ball.Id == otherBall.Id)
-            //     {
-            //         continue;
-            //     }
-            //     double distance = Math.Sqrt(Math.Pow(newXPosition - otherBall.XPosition, 2) + Math.Pow(newYPosition - otherBall.YPosition, 2));
-            //     if (distance <= ball.Diameter)
-            //     {
-            //         double overlap = ball.Diameter - distance;
-            //         
-            //         if(ball.XSpeed > 0)
-            //         {
-            //             newXPosition -= overlap;
-            //         }
-            //         else
-            //         {
-            //             newXPosition += overlap;
-            //         }
-            //         
-            //         if(ball.YSpeed > 0)
-            //         {
-            //             newYPosition -= overlap;
-            //         }
-            //         else
-            //         {
-            //             newYPosition += overlap;
-            //         }
-            //         
-            //         
-            //
-            //         // newXPosition -= overlap ;
-            //         // newYPosition -= overlap ;
-            //         // otherBall.XPosition += overlap / 2;
-            //         // otherBall.YPosition += overlap / 2;
-            //
-            //         var tempXSpeed = ball.XSpeed;
-            //         var tempYSpeed = ball.YSpeed;
-            //         ball.XSpeed = otherBall.XSpeed;
-            //         ball.YSpeed = otherBall.YSpeed;
-            //         otherBall.XSpeed = tempXSpeed;
-            //         otherBall.YSpeed = tempYSpeed;
-            //         
-            //         
-            //         //ball.XSpeed *= -1;
-            //         //ball.YSpeed *= -1;
-            //     }
-            // }
-            
-            //////
-            // Druga implementacja kolizji, działa najlepiej, nie uwzględnia masy
-            //
             foreach (var otherBall in GetBalls())
             {
                 if (ball.Id == otherBall.Id)
@@ -150,102 +97,45 @@ public class BallController : IBallController
             
                 if (distance < ball.Diameter / 2 + otherBall.Diameter / 2)
                 {
-                    // Oblicz kąt
-                    double angle = Math.Atan2(dy, dx);
+                // Oblicz kąt
+                double angle = Math.Atan2(dy, dx);
             
-                    // Oblicz prędkości dla każdej z piłek
-                    double ballTotalVelocity = Math.Sqrt(ball.XSpeed * ball.XSpeed + ball.YSpeed * ball.YSpeed);
-                    double otherBallTotalVelocity = Math.Sqrt(otherBall.XSpeed * otherBall.XSpeed + otherBall.YSpeed * otherBall.YSpeed);
+                // Oblicz prędkości dla każdej z piłek
+                double ballTotalVelocity = Math.Sqrt(ball.XSpeed * ball.XSpeed + ball.YSpeed * ball.YSpeed);
+                double otherBallTotalVelocity =
+                    Math.Sqrt(otherBall.XSpeed * otherBall.XSpeed + otherBall.YSpeed * otherBall.YSpeed);
             
-                    // Oblicz nowe prędkości
-                    double newBallXSpeed = ballTotalVelocity * Math.Cos(angle);
-                    double newBallYSpeed = ballTotalVelocity * Math.Sin(angle);
-                    double newOtherBallXSpeed = otherBallTotalVelocity * Math.Cos(angle + Math.PI);
-                    double newOtherBallYSpeed = otherBallTotalVelocity * Math.Sin(angle + Math.PI);
-            
+                    // Oblicz nowe prędkości uwzględniając masy
+                double newBallXSpeed =
+                    (ballTotalVelocity * (ball.Mass - otherBall.Mass) +
+                        2 * otherBall.Mass * otherBallTotalVelocity) / (ball.Mass + otherBall.Mass) *
+                    Math.Cos(angle);
+                double newBallYSpeed =
+                    (ballTotalVelocity * (ball.Mass - otherBall.Mass) +
+                        2 * otherBall.Mass * otherBallTotalVelocity) / (ball.Mass + otherBall.Mass) *
+                    Math.Sin(angle);
+                double newOtherBallXSpeed =
+                    (otherBallTotalVelocity * (otherBall.Mass - ball.Mass) +
+                        2 * ball.Mass * ballTotalVelocity) / (ball.Mass + otherBall.Mass) *
+                    Math.Cos(angle + Math.PI);
+                double newOtherBallYSpeed =
+                    (otherBallTotalVelocity * (otherBall.Mass - ball.Mass) +
+                        2 * ball.Mass * ballTotalVelocity) / (ball.Mass + otherBall.Mass) *
+                    Math.Sin(angle + Math.PI);
+
                     // Zaktualizuj prędkości
                     ball.XSpeed = newBallXSpeed;
                     ball.YSpeed = newBallYSpeed;
                     otherBall.XSpeed = newOtherBallXSpeed;
                     otherBall.YSpeed = newOtherBallYSpeed;
-                    
+            
                     // Napraw nakładanie się kul
                     double overlap = ball.Diameter / 2 + otherBall.Diameter / 2 - distance;
                     newXPosition += overlap * Math.Cos(angle);
                     newYPosition += overlap * Math.Sin(angle);
-                    
                 }
             }
-            
-            //////
-            // Trzecia implementacja kolizji, uwzględnia masę, problem z blokującymi się kulami (chyba fixed??)
-            //
-            // foreach (var otherBall in GetBalls())
-            // {
-            //     if (ball.Id == otherBall.Id)
-            //     {
-            //         continue;
-            //     }
-            //
-            //     double dx = newXPosition - otherBall.XPosition;
-            //     double dy = newYPosition - otherBall.YPosition;
-            //     double distance = Math.Sqrt(dx * dx + dy * dy);
-            //
-            //     if (distance < ball.Diameter / 2 + otherBall.Diameter / 2)
-            //     {
-            //         // Oblicz kąt
-            //         double angle = Math.Atan2(dy, dx);
-            //
-            //         // Oblicz prędkości dla każdej z piłek
-            //         double ballTotalVelocity = Math.Sqrt(ball.XSpeed * ball.XSpeed + ball.YSpeed * ball.YSpeed);
-            //         double otherBallTotalVelocity =
-            //             Math.Sqrt(otherBall.XSpeed * otherBall.XSpeed + otherBall.YSpeed * otherBall.YSpeed);
-            //
-            //         // Oblicz nowe prędkości uwzględniając masy
-            //         double newBallXSpeed, newBallYSpeed, newOtherBallXSpeed, newOtherBallYSpeed;
-            //         if (ball.Mass == otherBall.Mass)
-            //         {
-            //             // Jeśli masy są identyczne, prędkości są zamieniane miejscami
-            //             newBallXSpeed = otherBall.XSpeed;
-            //             newBallYSpeed = otherBall.YSpeed;
-            //             newOtherBallXSpeed = ball.XSpeed;
-            //             newOtherBallYSpeed = ball.YSpeed;
-            //             Console.WriteLine("Masy są równe");
-            //         }
-            //         else
-            //         {
-            //             Console.WriteLine("Masy nie są równe");
-            //             newBallXSpeed =
-            //                 (ballTotalVelocity * (ball.Mass - otherBall.Mass) +
-            //                  2 * otherBall.Mass * otherBallTotalVelocity) / (ball.Mass + otherBall.Mass) *
-            //                 Math.Cos(angle);
-            //             newBallYSpeed =
-            //                 (ballTotalVelocity * (ball.Mass - otherBall.Mass) +
-            //                  2 * otherBall.Mass * otherBallTotalVelocity) / (ball.Mass + otherBall.Mass) *
-            //                 Math.Sin(angle);
-            //             newOtherBallXSpeed =
-            //                 (otherBallTotalVelocity * (otherBall.Mass - ball.Mass) +
-            //                  2 * ball.Mass * ballTotalVelocity) / (ball.Mass + otherBall.Mass) *
-            //                 Math.Cos(angle + Math.PI);
-            //             newOtherBallYSpeed =
-            //                 (otherBallTotalVelocity * (otherBall.Mass - ball.Mass) +
-            //                  2 * ball.Mass * ballTotalVelocity) / (ball.Mass + otherBall.Mass) *
-            //                 Math.Sin(angle + Math.PI);
-            //         }
-            //
-            //         // Zaktualizuj prędkości
-            //         ball.XSpeed = newBallXSpeed;
-            //         ball.YSpeed = newBallYSpeed;
-            //         otherBall.XSpeed = newOtherBallXSpeed;
-            //         otherBall.YSpeed = newOtherBallYSpeed;
-            //
-            //         // Napraw nakładanie się kul
-            //         double overlap = ball.Diameter / 2 + otherBall.Diameter / 2 - distance;
-            //         newXPosition += overlap * Math.Cos(angle);
-            //         newYPosition += overlap * Math.Sin(angle);
-            //     }
-            // }
-
+                        
             if (newYPosition <= 0)
             {
                 newYPosition = 0;
@@ -257,7 +147,6 @@ public class BallController : IBallController
                 ball.YSpeed *= -1;
             }
 
-            
             if (newXPosition <= 0)
             {
                 newXPosition = 0;

@@ -9,4 +9,6 @@ public interface IBall
     double XSpeed { get; set; }
     double YSpeed { get; set; }
     double Mass { get; set; }
+    bool IsMoving { get; set; }
+    void Move();
 }

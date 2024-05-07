@@ -9,6 +9,10 @@ namespace Data
         private double _xSpeed;
         private double _ySpeed;
         private double _mass;
+        private bool _isMoving;
+        
+        public delegate void Notify(Ball ball);  // delegat do powiadamiania
+        public event Notify OnChange;   // zdarzenie
 
         public Ball(int id, double x, double y, int diameter, double xSpeed, double ySpeed, double mass)
         {
@@ -61,6 +65,22 @@ namespace Data
         {
             get => _mass;
             set => _mass = value;
+        }
+        
+        public bool IsMoving
+        {
+            get => _isMoving;
+            set => _isMoving = value;
+        }
+        
+        public void Move() 
+        {
+            
+            // while(_isMoving)
+            OnChange?.Invoke(this);
+            
+            // XPosition += XSpeed;
+            // YPosition += YSpeed;
         }
         
         

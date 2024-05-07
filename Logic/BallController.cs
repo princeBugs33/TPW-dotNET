@@ -63,15 +63,26 @@ public class BallController : IBallController
             double x = gridX * diameterMax + random.NextDouble() * (diameterMax - diameter);
             double y = gridY * diameterMax + random.NextDouble() * (diameterMax - diameter);*/
 
-            _ballRepository.AddBall(new Ball(
+            // _ballRepository.AddBall(new Ball(
+            //     i,
+            //     x,
+            //     y,
+            //     diameter,
+            //     random.NextDouble() + (double)random.Next(-1, 1),
+            //     random.NextDouble() + (double)random.Next(-1, 1),
+            //     mass)
+            // );
+            Ball ball = new Ball(
                 i,
                 x,
                 y,
                 diameter,
                 random.NextDouble() + (double)random.Next(-1, 1),
                 random.NextDouble() + (double)random.Next(-1, 1),
-                mass)
+                mass
             );
+            _ballRepository.AddBall(ball);
+            ball.OnChange += MoveBall;
         }
     }
 
@@ -80,23 +91,30 @@ public class BallController : IBallController
         
         foreach (var ball in GetBalls())
         {
-            var newXPosition = ball.XPosition + ball.XSpeed;
-            var newYPosition = ball.YPosition + ball.YSpeed;
+            // MoveBall(ball);
+            ball.Move();
+        }
+    }
+
+    private void MoveBall(IBall ball)
+    {
+        var newXPosition = ball.XPosition + ball.XSpeed;
+        var newYPosition = ball.YPosition + ball.YSpeed;
 
             
-            foreach (var otherBall in GetBalls())
+        foreach (var otherBall in GetBalls())
+        {
+            if (ball.Id == otherBall.Id)
             {
-                if (ball.Id == otherBall.Id)
-                {
-                    continue;
-                }
+                continue;
+            }
             
-                double dx = newXPosition - otherBall.XPosition;
-                double dy = newYPosition - otherBall.YPosition;
-                double distance = Math.Sqrt(dx * dx + dy * dy);
+            double dx = newXPosition - otherBall.XPosition;
+            double dy = newYPosition - otherBall.YPosition;
+            double distance = Math.Sqrt(dx * dx + dy * dy);
             
-                if (distance < ball.Diameter / 2 + otherBall.Diameter / 2)
-                {
+            if (distance < ball.Diameter / 2 + otherBall.Diameter / 2)
+            {
                 // Oblicz kąt
                 double angle = Math.Atan2(dy, dx);
             
@@ -105,63 +123,62 @@ public class BallController : IBallController
                 double otherBallTotalVelocity =
                     Math.Sqrt(otherBall.XSpeed * otherBall.XSpeed + otherBall.YSpeed * otherBall.YSpeed);
             
-                    // Oblicz nowe prędkości uwzględniając masy
+                // Oblicz nowe prędkości uwzględniając masy
                 double newBallXSpeed =
                     (ballTotalVelocity * (ball.Mass - otherBall.Mass) +
-                        2 * otherBall.Mass * otherBallTotalVelocity) / (ball.Mass + otherBall.Mass) *
+                     2 * otherBall.Mass * otherBallTotalVelocity) / (ball.Mass + otherBall.Mass) *
                     Math.Cos(angle);
                 double newBallYSpeed =
                     (ballTotalVelocity * (ball.Mass - otherBall.Mass) +
-                        2 * otherBall.Mass * otherBallTotalVelocity) / (ball.Mass + otherBall.Mass) *
+                     2 * otherBall.Mass * otherBallTotalVelocity) / (ball.Mass + otherBall.Mass) *
                     Math.Sin(angle);
                 double newOtherBallXSpeed =
                     (otherBallTotalVelocity * (otherBall.Mass - ball.Mass) +
-                        2 * ball.Mass * ballTotalVelocity) / (ball.Mass + otherBall.Mass) *
+                     2 * ball.Mass * ballTotalVelocity) / (ball.Mass + otherBall.Mass) *
                     Math.Cos(angle + Math.PI);
                 double newOtherBallYSpeed =
                     (otherBallTotalVelocity * (otherBall.Mass - ball.Mass) +
-                        2 * ball.Mass * ballTotalVelocity) / (ball.Mass + otherBall.Mass) *
+                     2 * ball.Mass * ballTotalVelocity) / (ball.Mass + otherBall.Mass) *
                     Math.Sin(angle + Math.PI);
 
-                    // Zaktualizuj prędkości
-                    ball.XSpeed = newBallXSpeed;
-                    ball.YSpeed = newBallYSpeed;
-                    otherBall.XSpeed = newOtherBallXSpeed;
-                    otherBall.YSpeed = newOtherBallYSpeed;
+                // Zaktualizuj prędkości
+                ball.XSpeed = newBallXSpeed;
+                ball.YSpeed = newBallYSpeed;
+                otherBall.XSpeed = newOtherBallXSpeed;
+                otherBall.YSpeed = newOtherBallYSpeed;
             
-                    // Napraw nakładanie się kul
-                    double overlap = ball.Diameter / 2 + otherBall.Diameter / 2 - distance;
-                    newXPosition += overlap * Math.Cos(angle);
-                    newYPosition += overlap * Math.Sin(angle);
-                }
+                // Napraw nakładanie się kul
+                double overlap = ball.Diameter / 2 + otherBall.Diameter / 2 - distance;
+                newXPosition += overlap * Math.Cos(angle);
+                newYPosition += overlap * Math.Sin(angle);
             }
-                        
-            if (newYPosition <= 0)
-            {
-                newYPosition = 0;
-                ball.YSpeed *= -1;
-            } 
-            else if (newYPosition + ball.Diameter >= 600)
-            {
-                newYPosition = 600 - ball.Diameter;
-                ball.YSpeed *= -1;
-            }
-
-            if (newXPosition <= 0)
-            {
-                newXPosition = 0;
-                ball.XSpeed *= -1;
-            } 
-            else if (newXPosition + ball.Diameter >= 800)
-            {
-                newXPosition = 800 - ball.Diameter;
-                ball.XSpeed *= -1;
-            }
-
-            // Przypisz nowe pozycje po zakończeniu wszystkich obliczeń
-            ball.XPosition = newXPosition;
-            ball.YPosition = newYPosition;
         }
+                        
+        if (newYPosition <= 0)
+        {
+            newYPosition = 0;
+            ball.YSpeed *= -1;
+        } 
+        else if (newYPosition + ball.Diameter >= 600)
+        {
+            newYPosition = 600 - ball.Diameter;
+            ball.YSpeed *= -1;
+        }
+
+        if (newXPosition <= 0)
+        {
+            newXPosition = 0;
+            ball.XSpeed *= -1;
+        } 
+        else if (newXPosition + ball.Diameter >= 800)
+        {
+            newXPosition = 800 - ball.Diameter;
+            ball.XSpeed *= -1;
+        }
+
+        // Przypisz nowe pozycje po zakończeniu wszystkich obliczeń
+        ball.XPosition = newXPosition;
+        ball.YPosition = newYPosition;
     }
 
     public int Height

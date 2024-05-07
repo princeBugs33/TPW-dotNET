@@ -54,7 +54,7 @@ public class ViewModel : INotifyPropertyChanged
     
     private void Timer_Tick(object sender, EventArgs e)
     {
-        _modelMain.MoveBalls();
+        //_modelMain.MoveBalls();
         OnPropertyChanged("Balls");
     }
 
@@ -64,6 +64,8 @@ public class ViewModel : INotifyPropertyChanged
         IsStopEnable = true;
         IsTextFieldEnable = false;
         _modelMain.GenerateBalls(int.Parse(NumberOfBalls));
+        // Task.Run(() => _modelMain.MoveBalls());
+        _modelMain.MoveBalls();
         _timer.Start();
     }
 

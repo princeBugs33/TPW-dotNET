@@ -10,5 +10,5 @@ public interface IBall
     double YSpeed { get; set; }
     double Mass { get; set; }
     bool IsMoving { get; set; }
-    void Move();
+    void Move(Barrier barrier);
 }

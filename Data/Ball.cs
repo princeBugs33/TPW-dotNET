@@ -73,14 +73,19 @@ namespace Data
             set => _isMoving = value;
         }
         
-        public void Move() 
+        public void Move(Barrier barrier) 
         {
             
             // while(_isMoving)
-            OnChange?.Invoke(this);
-            
+            //OnChange?.Invoke(this);
             // XPosition += XSpeed;
             // YPosition += YSpeed;
+
+            while (true)
+            {
+                OnChange?.Invoke(this);
+                barrier.SignalAndWait();
+            }
         }
         
         

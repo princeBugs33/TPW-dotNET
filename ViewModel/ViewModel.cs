@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -75,6 +76,28 @@ public class ViewModel : INotifyPropertyChanged
         // Task.Run(() => _modelMain.MoveBalls());
         _modelMain.MoveBalls();
         // _timer.Start();
+        
+        //Lock against the number of zombie threads
+        // Task.Run(() =>
+        // {
+        //     while (true)
+        //     {
+        //         // Get the current process
+        //         Process currentProcess = Process.GetCurrentProcess();
+        //
+        //         // Get the number of threads in the current process
+        //         int numberOfThreads = currentProcess.Threads.Count;
+        //
+        //         // Check if NumberOfBalls is greater than the number of threads
+        //         if (numberOfThreads >= int.Parse(NumberOfBalls))
+        //         {
+        //             IsStopEnable = true;
+        //             break;
+        //         }
+        //         //Thread.Sleep(5);
+        //         
+        //     }
+        // });
     }
 
     public void Stop()

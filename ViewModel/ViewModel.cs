@@ -40,21 +40,29 @@ public class ViewModel : INotifyPropertyChanged
         StartCommand = new RelayCommand(Start, () => IsStartEnable);
         StopCommand = new RelayCommand(Stop, () => IsStopEnable);
         _modelMain = new ModelMain(_width, _height);
-        _numberOfBalls = "5";
+        _numberOfBalls = "50";
 
         IsStartEnable = true;
         IsStopEnable = false;
         IsTextFieldEnable = true;
         
-        _timer = new DispatcherTimer();
-        _timer.Interval = TimeSpan.FromMilliseconds(10);
-        _timer.Tick += Timer_Tick;
+        // _timer = new DispatcherTimer();
+        // _timer.Interval = TimeSpan.FromMilliseconds(10);
+        // _timer.Tick += Timer_Tick;
+        
+        _modelMain.BallController.OnChange += UpdateBalls;
         
     }
     
-    private void Timer_Tick(object sender, EventArgs e)
+    // private void Timer_Tick(object sender, EventArgs e)
+    // {
+    //     //_modelMain.MoveBalls();
+    //     OnPropertyChanged("Balls");
+    // }
+    
+    public void UpdateBalls()
     {
-        //_modelMain.MoveBalls();
+        // Console.WriteLine("UpdateBalls");
         OnPropertyChanged("Balls");
     }
 
@@ -66,7 +74,7 @@ public class ViewModel : INotifyPropertyChanged
         _modelMain.GenerateBalls(int.Parse(NumberOfBalls));
         // Task.Run(() => _modelMain.MoveBalls());
         _modelMain.MoveBalls();
-        _timer.Start();
+        // _timer.Start();
     }
 
     public void Stop()
@@ -74,7 +82,7 @@ public class ViewModel : INotifyPropertyChanged
         IsStartEnable = true;
         IsStopEnable = false;
         IsTextFieldEnable = true;
-        _timer.Stop();
+        // _timer.Stop();
         _modelMain.ClearBalls();
         OnPropertyChanged("Balls");
     }

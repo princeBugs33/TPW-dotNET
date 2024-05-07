@@ -9,6 +9,11 @@ public class BallController : IBallController
     private int _width;
     private int _height;
     private readonly object _lock = new object();
+    // private Action _onChange;
+
+    public delegate void Notify();  // delegat do powiadamiania
+    //public event Notify _onChange;   // zdarzenie
+    public event Notify? OnChange;
     
 
     public BallController(IBallRepository ballRepository, int width, int height)
@@ -33,8 +38,8 @@ public class BallController : IBallController
         
         int diameter = 40;
 
-        int gridWidth = _width / diameter + 1;
-        int gridHeight = _height / diameter + 1;
+        int gridWidth = _width / diameter + 2;
+        int gridHeight = _height / diameter + 2;
 
         double mass = 2;
 
@@ -83,10 +88,11 @@ public class BallController : IBallController
                 random.NextDouble() + (double)random.Next(-1, 1),
                 mass
             );
+            
             _ballRepository.AddBall(ball);
             ball.OnChange += MoveBall;
         }
-        
+        return;
     }
 
     public void MoveBalls()
@@ -105,6 +111,7 @@ public class BallController : IBallController
         
         Barrier barrier = new Barrier(GetBalls().Count, (b) =>
         {
+            OnChange?.Invoke();
             Thread.Sleep(10);
         });
         
@@ -112,7 +119,7 @@ public class BallController : IBallController
         {
             Task.Run(() => ball.Move(barrier));
         }
-        
+        return;
     }
 
     private void MoveBall(IBall ball)
@@ -217,7 +224,10 @@ public class BallController : IBallController
     {
         get => _width;
     }
+
     
+
+
     public List<IBall> GetBalls()
     {
         return _ballRepository.GetBalls();
@@ -225,6 +235,11 @@ public class BallController : IBallController
 
     public void ClearBalls()
     {
+        foreach (var ball in GetBalls())
+        {
+            ball.IsMoving = false;
+            ball.OnChange -= MoveBall;
+        }
         _ballRepository.ClearAll();
     }
 }

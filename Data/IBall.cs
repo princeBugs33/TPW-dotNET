@@ -11,4 +11,5 @@ public interface IBall
     double Mass { get; set; }
     bool IsMoving { get; set; }
     void Move(Barrier barrier);
+    event Ball.Notify OnChange;
 }

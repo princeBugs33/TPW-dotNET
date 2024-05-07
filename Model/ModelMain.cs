@@ -32,4 +32,18 @@ public class ModelMain
     {
         _ballController.ClearBalls();
     }
+    
+    public IBallController BallController
+    {
+        get => _ballController;
+        set => _ballController = value;
+    }
+
+    public IBallRepository BallRepository
+    {
+        get => _ballRepository;
+        set => _ballRepository = value;
+    }
+    
+    
 }

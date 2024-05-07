@@ -9,10 +9,10 @@ namespace Data
         private double _xSpeed;
         private double _ySpeed;
         private double _mass;
-        private bool _isMoving;
+        private bool _isMoving = true;
         
         public delegate void Notify(Ball ball);  // delegat do powiadamiania
-        public event Notify OnChange;   // zdarzenie
+        public event Notify? OnChange;   // zdarzenie
 
         public Ball(int id, double x, double y, int diameter, double xSpeed, double ySpeed, double mass)
         {
@@ -81,7 +81,7 @@ namespace Data
             // XPosition += XSpeed;
             // YPosition += YSpeed;
 
-            while (true)
+            while (_isMoving)
             {
                 OnChange?.Invoke(this);
                 barrier.SignalAndWait();

@@ -52,13 +52,13 @@ public class ViewModel : INotifyPropertyChanged
     public void UpdateBalls()
     {
         OnPropertyChanged("Balls");
-        IsStopEnable = true;
+        // IsStopEnable = true;
     }
 
     public void Start()
     {
         IsStartEnable = false;
-        // IsStopEnable = true;
+        IsStopEnable = true;
         IsTextFieldEnable = false;
         _modelMain.GenerateBalls(int.Parse(NumberOfBalls));
         _modelMain.MoveBalls();

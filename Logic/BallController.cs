@@ -9,13 +9,8 @@ public class BallController : IBallController
     private int _width;
     private int _height;
     private readonly object _lock = new object();
-    // private Action _onChange;
-
-    public delegate void Notify();  // delegat do powiadamiania
-    //public event Notify _onChange;   // zdarzenie
-    public event Notify? OnChange;
+    public event NotifyDelegateBallController.NotifyBallController? OnChange;
     
-
     public BallController(IBallRepository ballRepository, int width, int height)
     {
         _ballRepository = ballRepository;
@@ -58,7 +53,7 @@ public class BallController : IBallController
         for (var i = 0; i < number; i++)
         {
             var (gridX, gridY) = coordinates[i];
-
+            
 
 
             // fixed ball size
@@ -92,22 +87,10 @@ public class BallController : IBallController
             _ballRepository.AddBall(ball);
             ball.OnChange += MoveBall;
         }
-        return;
     }
-
+    
     public void MoveBalls()
     {
-        // Barrier barrier = new Barrier(GetBalls().Count);
-        // while (true)
-        // {
-        //     foreach (var ball in GetBalls())
-        //     {
-        //         // MoveBall(ball);
-        //         ball.Move(barrier);
-        //     }
-        //     
-        //     //Thread.Sleep(10);
-        // }
         
         Barrier barrier = new Barrier(GetBalls().Count, (b) =>
         {
@@ -117,9 +100,10 @@ public class BallController : IBallController
         
         foreach (var ball in GetBalls())
         {
-            Task.Run(() => ball.Move(barrier));
+             // Task.Run(() => ball.Move(barrier));
+             ball.MoveAsync(barrier);
+             
         }
-        return;
     }
 
     private void MoveBall(IBall ball)
@@ -207,12 +191,7 @@ public class BallController : IBallController
             // Przypisz nowe pozycje po zakończeniu wszystkich obliczeń
             ball.XPosition = newXPosition;
             ball.YPosition = newYPosition;
-            
-            
         }
-
-
-        
     }
 
     public int Height
@@ -224,10 +203,7 @@ public class BallController : IBallController
     {
         get => _width;
     }
-
     
-
-
     public List<IBall> GetBalls()
     {
         return _ballRepository.GetBalls();
@@ -243,102 +219,3 @@ public class BallController : IBallController
         _ballRepository.ClearAll();
     }
 }
-///////////////////////////////////////////
-// Stan z Etapu 1
-//
-// using Data;
-//
-// namespace Logic;
-//
-// public class BallController : IBallController
-// {
-//     private IBallRepository _ballRepository;
-//     private int _width;
-//     private int _height;
-//     
-//
-//     public BallController(IBallRepository ballRepository, int width, int height)
-//     {
-//         _ballRepository = ballRepository;
-//         _width = width;
-//         _height = height;
-//     }
-//
-//     public void GenerateBalls(int number)
-//     {
-//         var random = new Random();
-//         int diameter = 40;
-//         for (var i = 0; i < number; i++)
-//         {
-//             
-//             var x = random.Next(2) * 2 - 1;
-//             var y = random.Next(2) * 2 - 1;
-//             _ballRepository.AddBall(new Ball(
-//                 i, 
-//                 (double)random.Next(0, _width - diameter),
-//                 (double)random.Next(0, _height - diameter), 
-//                 diameter,
-//                 random.NextDouble() + (double)random.Next(-2, 2), 
-//                 random.NextDouble() + (double)random.Next(-2, 2))
-//             );
-//         }
-//     }
-//     
-//     public void MoveBalls()
-//     {
-//         foreach (var ball in GetBalls())
-//         {
-//             var newXPosition = ball.XPosition + ball.XSpeed;
-//             if (newXPosition <= 0)
-//             {
-//                 ball.XPosition = 0;
-//                 ball.XSpeed *= -1;
-//             } 
-//             else if (newXPosition + ball.Diameter >= 800)
-//             {
-//                 ball.XPosition = 800 - ball.Diameter;
-//                 ball.XSpeed *= -1;
-//             }
-//             else
-//             {
-//                 ball.XPosition = newXPosition;
-//             }
-//
-//             var newYPosition = ball.YPosition + ball.YSpeed;
-//             if (newYPosition <= 0)
-//             {
-//                 ball.YPosition = 0;
-//                 ball.YSpeed *= -1;
-//             } 
-//             else if (newYPosition + ball.Diameter >= 600)
-//             {
-//                 ball.YPosition = 600 - ball.Diameter;
-//                 ball.YSpeed *= -1;
-//             }
-//             else
-//             {
-//                 ball.YPosition = newYPosition; 
-//             }
-//         }
-//     }
-//
-//     public int Height
-//     {
-//         get => _height;
-//     }
-//
-//     public int Width
-//     {
-//         get => _width;
-//     }
-//     
-//     public List<IBall> GetBalls()
-//     {
-//         return _ballRepository.GetBalls();
-//     }
-//
-//     public void ClearBalls()
-//     {
-//         _ballRepository.ClearAll();
-//     }
-//}

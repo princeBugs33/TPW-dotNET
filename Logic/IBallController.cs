@@ -8,7 +8,7 @@ public interface IBallController
     void MoveBalls();
     int Height { get; }
     int Width { get; }
-    event BallController.Notify OnChange;
+    event NotifyDelegateBallController.NotifyBallController? OnChange;
     List<IBall> GetBalls();
     public void ClearBalls();
 }

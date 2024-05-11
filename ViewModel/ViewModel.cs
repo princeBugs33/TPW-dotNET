@@ -14,14 +14,13 @@ namespace ViewModel;
 public class ViewModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
-
+    
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        
     }
     
-
-    //public ObservableCollection<Ball> Balls { get; set; }
     private String _textBoxColor;
     private ModelMain _modelMain;
     private String _numberOfBalls;
@@ -47,57 +46,44 @@ public class ViewModel : INotifyPropertyChanged
         IsStopEnable = false;
         IsTextFieldEnable = true;
         
-        // _timer = new DispatcherTimer();
-        // _timer.Interval = TimeSpan.FromMilliseconds(10);
-        // _timer.Tick += Timer_Tick;
-        
         _modelMain.BallController.OnChange += UpdateBalls;
-        
     }
-    
-    // private void Timer_Tick(object sender, EventArgs e)
-    // {
-    //     //_modelMain.MoveBalls();
-    //     OnPropertyChanged("Balls");
-    // }
     
     public void UpdateBalls()
     {
-        // Console.WriteLine("UpdateBalls");
         OnPropertyChanged("Balls");
+        IsStopEnable = true;
     }
 
     public void Start()
     {
         IsStartEnable = false;
-        IsStopEnable = true;
+        // IsStopEnable = true;
         IsTextFieldEnable = false;
         _modelMain.GenerateBalls(int.Parse(NumberOfBalls));
-        // Task.Run(() => _modelMain.MoveBalls());
         _modelMain.MoveBalls();
-        // _timer.Start();
         
-        //Lock against the number of zombie threads
-        // Task.Run(() =>
-        // {
-        //     while (true)
-        //     {
-        //         // Get the current process
-        //         Process currentProcess = Process.GetCurrentProcess();
-        //
-        //         // Get the number of threads in the current process
-        //         int numberOfThreads = currentProcess.Threads.Count;
-        //
-        //         // Check if NumberOfBalls is greater than the number of threads
-        //         if (numberOfThreads >= int.Parse(NumberOfBalls))
-        //         {
-        //             IsStopEnable = true;
-        //             break;
-        //         }
-        //         //Thread.Sleep(5);
-        //         
-        //     }
-        // });
+        // Lock against the number of zombie threads
+         // Task.Run(() =>
+         // {
+         //     while (true)
+         //     {
+         //         // Get the current process
+         //         Process currentProcess = Process.GetCurrentProcess();
+         //
+         //         // Get the number of threads in the current process
+         //         int numberOfThreads = currentProcess.Threads.Count;
+         //
+         //         // Check if NumberOfBalls is greater than the number of threads
+         //         if (numberOfThreads >= int.Parse(NumberOfBalls))
+         //         {
+         //             IsStopEnable = true;
+         //             break;
+         //         }
+         //         //Thread.Sleep(5);
+         //         
+         //     }
+         // });
     }
 
     public void Stop()
@@ -105,7 +91,6 @@ public class ViewModel : INotifyPropertyChanged
         IsStartEnable = true;
         IsStopEnable = false;
         IsTextFieldEnable = true;
-        // _timer.Stop();
         _modelMain.ClearBalls();
         OnPropertyChanged("Balls");
     }

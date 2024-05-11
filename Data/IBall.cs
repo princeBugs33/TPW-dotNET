@@ -10,6 +10,6 @@ public interface IBall
     double YSpeed { get; set; }
     double Mass { get; set; }
     bool IsMoving { get; set; }
-    void Move(Barrier barrier);
-    event Ball.Notify OnChange;
+    event NotifyDelegateBall.NotifyBall? OnChange;
+    void MoveAsync(Barrier barrier);
 }

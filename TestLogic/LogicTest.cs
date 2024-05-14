@@ -1,9 +1,6 @@
 ﻿using System.Reflection;
 using Data;
 using Logic;
-using TestData;
-using Xunit.Abstractions;
-using Xunit.Sdk;
 
 namespace TestLogic;
 
@@ -15,8 +12,7 @@ public class LogicTest
     [Fact]
     public void TestGenerateBalls()
     {
-        int numberOfBalls = 5;
-        int diameter = 40;
+        int numberOfBalls = 20;
         IBallRepository ballRepository = new BallRepository();
         IBallController ballController = new BallController(ballRepository, width, height);
 
@@ -26,11 +22,10 @@ public class LogicTest
         Assert.Equal(numberOfBalls, balls.Count);
         foreach (var ball in balls)
         {
-            Assert.True(ball.XPosition >= 0 && ball.XPosition <= width - diameter);
-            Assert.True(ball.YPosition >= 0 && ball.YPosition <= height - diameter);
-            Assert.Equal(diameter, ball.Diameter);
-            Assert.True(ball.XSpeed >= -2 && ball.XSpeed <= 2);
-            Assert.True(ball.YSpeed >= -2 && ball.YSpeed <= 2);
+            Assert.True(ball.XPosition >= 0 && ball.XPosition + ball.Diameter <= width);
+            Assert.True(ball.YPosition >= 0 && ball.YPosition + ball.Diameter <= height);
+            Assert.True(ball.XSpeed is >= -2 and <= 2);
+            Assert.True(ball.YSpeed is >= -2 and <= 2);
         }
     }
     

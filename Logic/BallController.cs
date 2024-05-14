@@ -26,23 +26,23 @@ public class BallController : IBallController
         /*int diameterMin = 20;
         int diameterMax = 40;
 
-        int gridWidth = _width / diameterMax + 1;
-        int gridHeight = _height / diameterMax + 1;*/
+        int gridWidth = (_width - diameterMax)  / diameterMax;
+        int gridHeight = (_height - diameterMax) / diameterMax;*/
 
         // fixed ball size
         
         int diameter = 40;
-
-        int gridWidth = _width / diameter + 2;
-        int gridHeight = _height / diameter + 2;
+        
+        int gridWidth = (_width - diameter) / diameter;
+        int gridHeight = (_height - diameter) / diameter;
 
         double mass = 2;
 
         List<(int, int)> coordinates = new List<(int, int)>();
 
-        for (int x = 0; x < gridWidth; x++)
+        for (int x = 0; x <= gridWidth; x++)
         {
-            for (int y = 0; y < gridHeight; y++)
+            for (int y = 0; y <= gridHeight; y++)
             {
                 coordinates.Add((x, y));
             }
@@ -65,15 +65,6 @@ public class BallController : IBallController
             double x = gridX * diameterMax + random.NextDouble() * (diameterMax - diameter);
             double y = gridY * diameterMax + random.NextDouble() * (diameterMax - diameter);*/
 
-            // _ballRepository.AddBall(new Ball(
-            //     i,
-            //     x,
-            //     y,
-            //     diameter,
-            //     random.NextDouble() + (double)random.Next(-1, 1),
-            //     random.NextDouble() + (double)random.Next(-1, 1),
-            //     mass)
-            // );
             Ball ball = new Ball(
                 i,
                 x,

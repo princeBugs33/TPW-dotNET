@@ -23,6 +23,7 @@ public class BallTest
         Assert.Equal(10, ball.Diameter);
         Assert.Equal(2.0, ball.XSpeed);
         Assert.Equal(3.0, ball.YSpeed);
+        Assert.Equal(1.0, ball.Mass);
     }
 
     [Fact]
@@ -61,5 +62,21 @@ public class BallTest
         Assert.Equal(10, _ball.Diameter);
         _ball.Diameter = 1;
         Assert.Equal(1, _ball.Diameter);
+    }
+    
+    [Fact]
+    public void BallMassTest()
+    {
+        Assert.Equal(1.0, _ball.Mass);
+        _ball.Mass = 5;
+        Assert.Equal(5, _ball.Mass);
+    }
+    
+    [Fact]
+    public void BallIsMovingTest()
+    {
+        Assert.True(_ball.IsMoving);
+        _ball.IsMoving = false;
+        Assert.False(_ball.IsMoving);
     }
 }

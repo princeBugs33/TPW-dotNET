@@ -6,12 +6,7 @@ public class BallRepository : IBallRepository
 
     public void AddBall(IBall? ball)
     {
-        if (ball == null)
-        {
-            //exception?
-            return; 
-        }
-        _balls.Add(ball);
+        if (ball != null) _balls.Add(ball);
     }
 
     public void ClearAll()

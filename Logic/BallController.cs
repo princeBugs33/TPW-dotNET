@@ -100,9 +100,7 @@ public class BallController : IBallController
         
         foreach (var ball in GetBalls())
         {
-             // Task.Run(() => ball.Move(barrier));
-             ball.MoveAsync(barrier);
-             
+             ball.MoveAsync(barrier); // Task.Run(() => ball.Move(barrier));
         }
     }
 
@@ -127,15 +125,14 @@ public class BallController : IBallController
                 
                 if (distance < ball.Diameter / 2 + otherBall.Diameter / 2)
                 {
-                    // Oblicz kąt
+                    // Calculate the angle
                     double angle = Math.Atan2(dy, dx);
                 
-                    // Oblicz prędkości dla każdej z piłek
+                    // Calculate the speed of the balls
                     double ballTotalVelocity = Math.Sqrt(ball.XSpeed * ball.XSpeed + ball.YSpeed * ball.YSpeed);
-                    double otherBallTotalVelocity =
-                        Math.Sqrt(otherBall.XSpeed * otherBall.XSpeed + otherBall.YSpeed * otherBall.YSpeed);
+                    double otherBallTotalVelocity = Math.Sqrt(otherBall.XSpeed * otherBall.XSpeed + otherBall.YSpeed * otherBall.YSpeed);
                 
-                    // Oblicz nowe prędkości uwzględniając masy
+                    // Calculate the speed of the balls taking into account the masses
                     double newBallXSpeed =
                         (ballTotalVelocity * (ball.Mass - otherBall.Mass) +
                          2 * otherBall.Mass * otherBallTotalVelocity) / (ball.Mass + otherBall.Mass) *
@@ -153,27 +150,28 @@ public class BallController : IBallController
                          2 * ball.Mass * ballTotalVelocity) / (ball.Mass + otherBall.Mass) *
                         Math.Sin(angle + Math.PI);
     
-                    // Zaktualizuj prędkości
+                    // Update speed
                     ball.XSpeed = newBallXSpeed;
                     ball.YSpeed = newBallYSpeed;
                     otherBall.XSpeed = newOtherBallXSpeed;
                     otherBall.YSpeed = newOtherBallYSpeed;
                 
-                    // Napraw nakładanie się kul
+                    // Protection against making a move twice
                     double overlap = ball.Diameter / 2 + otherBall.Diameter / 2 - distance;
                     newXPosition += overlap * Math.Cos(angle);
                     newYPosition += overlap * Math.Sin(angle);
                 }
             }
-                            
+                 
+            // Collision with the wall
             if (newYPosition <= 0)
             {
                 newYPosition = 0;
                 ball.YSpeed *= -1;
             } 
-            else if (newYPosition + ball.Diameter >= 600)
+            else if (newYPosition + ball.Diameter >= _height)
             {
-                newYPosition = 600 - ball.Diameter;
+                newYPosition = _height - ball.Diameter;
                 ball.YSpeed *= -1;
             }
     
@@ -182,13 +180,13 @@ public class BallController : IBallController
                 newXPosition = 0;
                 ball.XSpeed *= -1;
             } 
-            else if (newXPosition + ball.Diameter >= 800)
+            else if (newXPosition + ball.Diameter >= _width)
             {
-                newXPosition = 800 - ball.Diameter;
+                newXPosition = _width - ball.Diameter;
                 ball.XSpeed *= -1;
             }
     
-            // Przypisz nowe pozycje po zakończeniu wszystkich obliczeń
+            // Assigning a value after all calculations
             ball.XPosition = newXPosition;
             ball.YPosition = newYPosition;
         }

@@ -62,28 +62,6 @@ public class ViewModel : INotifyPropertyChanged
         IsTextFieldEnable = false;
         _modelMain.GenerateBalls(int.Parse(NumberOfBalls));
         _modelMain.MoveBalls();
-        
-        // Lock against the number of zombie threads
-         // Task.Run(() =>
-         // {
-         //     while (true)
-         //     {
-         //         // Get the current process
-         //         Process currentProcess = Process.GetCurrentProcess();
-         //
-         //         // Get the number of threads in the current process
-         //         int numberOfThreads = currentProcess.Threads.Count;
-         //
-         //         // Check if NumberOfBalls is greater than the number of threads
-         //         if (numberOfThreads >= int.Parse(NumberOfBalls))
-         //         {
-         //             IsStopEnable = true;
-         //             break;
-         //         }
-         //         //Thread.Sleep(5);
-         //         
-         //     }
-         // });
     }
 
     public void Stop()

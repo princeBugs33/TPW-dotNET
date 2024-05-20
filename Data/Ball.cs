@@ -73,7 +73,18 @@ namespace Data
         
         public void MoveAsync(Barrier barrier)
         {
-            Task.Run(() => Move(barrier));
+            /*
+             * Since we are no longer using Task.Run, but lower-level implementation Thread.Start,
+             * we lost the ability to benefit from the Task API, which provides advanced monitoring over the threads.
+             * To display number of threads, we can use the following powershell command:
+             * <code>
+             * (Get-Process -Name "View").Threads.Count
+             * </code>
+             */
+            //Task.Run(() => Move(barrier));  // This is the original line responsible for slow thread creation
+            new Thread(() => this.Move(barrier)).Start();
+            
+            
         }
         
         private void Move(Barrier barrier) 

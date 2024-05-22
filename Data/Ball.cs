@@ -83,8 +83,6 @@ namespace Data
              */
             //Task.Run(() => Move(barrier));  // This is the original line responsible for slow thread creation
             new Thread(() => this.Move(barrier)).Start();
-            
-            
         }
         
         private void Move(Barrier barrier) 
@@ -93,6 +91,9 @@ namespace Data
             {
                 OnChange?.Invoke(this);
                 barrier.SignalAndWait();
+                BallLogger.BallLog ballLog = new BallLogger.BallLog(_xPosition, _yPosition, _id, DateTime.Now);
+                BallLogger.Instance.Log(ballLog);
+                
             }
         }
         

@@ -86,7 +86,7 @@ public class BallController : IBallController
         Barrier barrier = new Barrier(GetBalls().Count, (b) =>
         {
             OnChange?.Invoke();
-            Thread.Sleep(10);
+            Thread.Sleep(20);
         });
         
         foreach (var ball in GetBalls())

@@ -101,7 +101,8 @@ public class BallController : IBallController
         //{
             var newXPosition = ball.XPosition + ball.XSpeed;
             var newYPosition = ball.YPosition + ball.YSpeed;
-    
+            // Variable for proper collision physics
+            bool collisionAlreadyHandled = false;
                 
             foreach (var otherBall in GetBalls())
             {
@@ -157,6 +158,11 @@ public class BallController : IBallController
                         double overlap = ball.Diameter / 2 + otherBall.Diameter / 2 - distance;
                         newXPosition += overlap * Math.Cos(angle);
                         newYPosition += overlap * Math.Sin(angle);
+                        
+                    }
+                    else
+                    {
+                        collisionAlreadyHandled = true;
                     }
                     
                     // double overlap = ball.Diameter / 2 + otherBall.Diameter / 2 - distance;
@@ -187,10 +193,16 @@ public class BallController : IBallController
                 newXPosition = _width - ball.Diameter;
                 ball.XSpeed *= -1;
             }
-    
+            
             // Assigning a value after all calculations
-            ball.XPosition = newXPosition;
-            ball.YPosition = newYPosition;
+            if(collisionAlreadyHandled == false)
+            {
+                ball.XPosition = newXPosition;
+                ball.YPosition = newYPosition;
+            }
+            
+            // ball.XPosition = newXPosition;
+            // ball.YPosition = newYPosition;
         //}
     }
 
@@ -208,7 +220,7 @@ public class BallController : IBallController
     {
         return _ballRepository.GetBalls();
     }
-
+    
     public void ClearBalls()
     {
         foreach (var ball in GetBalls())

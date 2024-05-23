@@ -121,6 +121,7 @@ public class BallController : IBallController
                         otherBall.Id,
                         otherBall.XPosition, otherBall.YPosition);
                     BallLogger.Log(collisionInfo);
+                    //Task.Run((() => BallLogger.Log(collisionInfo)));
                     
                     // Calculate the angle
                     double angle = Math.Atan2(dy, dx);

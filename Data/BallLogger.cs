@@ -27,8 +27,13 @@ namespace Data
                 // }
             }
         }
-        
+
         public static void Log(CollisionInfo collisionInfo)
+        {
+            Task.Run((() => LogTo(collisionInfo)));
+        }
+        
+        public static void LogTo(CollisionInfo collisionInfo)
         {
 
             if (LOG_TO_CONSOLE || LOG_TO_FILE)

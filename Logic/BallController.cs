@@ -97,8 +97,8 @@ public class BallController : IBallController
 
     private void MoveBall(IBall ball)
     {
-        lock (_lock)
-        {
+        //lock (_lock)
+        //{
             var newXPosition = ball.XPosition + ball.XSpeed;
             var newYPosition = ball.YPosition + ball.YSpeed;
     
@@ -141,16 +141,27 @@ public class BallController : IBallController
                          2 * ball.Mass * ballTotalVelocity) / (ball.Mass + otherBall.Mass) *
                         Math.Sin(angle + Math.PI);
     
+                    // Required for protection against making a move twice for ball that detected collision first
+                    double oldBallXSpeed = ball.XSpeed;
+                    double oldBallYSpeed = ball.YSpeed;
+                    
                     // Update speed
                     ball.XSpeed = newBallXSpeed;
                     ball.YSpeed = newBallYSpeed;
                     otherBall.XSpeed = newOtherBallXSpeed;
                     otherBall.YSpeed = newOtherBallYSpeed;
                 
-                    // Protection against making a move twice
-                    double overlap = ball.Diameter / 2 + otherBall.Diameter / 2 - distance;
-                    newXPosition += overlap * Math.Cos(angle);
-                    newYPosition += overlap * Math.Sin(angle);
+                    // Protection against making a move twice for ball that detected collision first
+                    if (oldBallXSpeed != ball.XSpeed && oldBallYSpeed != ball.YSpeed)
+                    {
+                        double overlap = ball.Diameter / 2 + otherBall.Diameter / 2 - distance;
+                        newXPosition += overlap * Math.Cos(angle);
+                        newYPosition += overlap * Math.Sin(angle);
+                    }
+                    
+                    // double overlap = ball.Diameter / 2 + otherBall.Diameter / 2 - distance;
+                    // newXPosition += overlap * Math.Cos(angle);
+                    // newYPosition += overlap * Math.Sin(angle);
                 }
             }
                  
@@ -180,7 +191,7 @@ public class BallController : IBallController
             // Assigning a value after all calculations
             ball.XPosition = newXPosition;
             ball.YPosition = newYPosition;
-        }
+        //}
     }
 
     public int Height

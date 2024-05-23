@@ -46,18 +46,72 @@ namespace Data
             get => _diameter;
             set => _diameter = value;
         }
+        
+        private readonly object speedLock = new object();
 
         public double XSpeed
         {
-            get => _xSpeed;
-            set => _xSpeed = value;
+            get
+            {
+                
+                return _xSpeed;
+                
+            }
+            set
+            {
+                if (Monitor.TryEnter(speedLock))
+                {
+                    try
+                    {
+                        _xSpeed = value;
+                    }
+                    finally
+                    {
+                        Monitor.Exit(speedLock);
+                    }
+                }
+            }
         }
 
         public double YSpeed
         {
-            get => _ySpeed;
-            set => _ySpeed = value;
+            get
+            {
+                
+                return _ySpeed;
+                
+            }
+            set
+            {
+                // lock (speedLock)
+                // {
+                //     _ySpeed = value;
+                // }
+                if (Monitor.TryEnter(speedLock))
+                {
+                    try
+                    {
+                        _ySpeed = value;
+                    }
+                    finally
+                    {
+                        Monitor.Exit(speedLock);
+                    }
+                }
+            }
         }
+
+        // public double XSpeed
+        // {
+        //     get => _xSpeed;
+        //     set => _xSpeed = value;
+        // }
+        //
+        // public double YSpeed
+        // {
+        //     get => _ySpeed;
+        //     set => _ySpeed = value;
+        // }
         
         public double Mass
         {
@@ -91,8 +145,8 @@ namespace Data
             {
                 OnChange?.Invoke(this);
                 barrier.SignalAndWait();
-                BallLogger.BallLog ballLog = new BallLogger.BallLog(_xPosition, _yPosition, _id, DateTime.Now);
-                BallLogger.Instance.Log(ballLog);
+                //BallLogger.BallLog ballLog = new BallLogger.BallLog(_xPosition, _yPosition, _id, DateTime.Now);
+                //BallLogger.Instance.Log(ballLog);
                 
             }
         }

@@ -91,8 +91,8 @@ namespace Data
             {
                 OnChange?.Invoke(this);
                 barrier.SignalAndWait();
-                BallLogger.BallLog ballLog = new BallLogger.BallLog(_xPosition, _yPosition, _id, DateTime.Now);
-                BallLogger.Instance.Log(ballLog);
+                //BallLogger.BallLog ballLog = new BallLogger.BallLog(_xPosition, _yPosition, _id, DateTime.Now);
+                //BallLogger.Instance.Log(ballLog);
                 
             }
         }

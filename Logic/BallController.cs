@@ -10,7 +10,7 @@ public class BallController : IBallController
     private int _height;
     private readonly object _lock = new object();
     public event NotifyDelegateBallController.NotifyBallController? OnChange;
-    
+
     public BallController(IBallRepository ballRepository, int width, int height)
     {
         _ballRepository = ballRepository;
@@ -30,9 +30,9 @@ public class BallController : IBallController
         int gridHeight = (_height - diameterMax) / diameterMax;*/
 
         // fixed ball size
-        
+
         int diameter = 40;
-        
+
         int gridWidth = (_width - diameter) / diameter;
         int gridHeight = (_height - diameter) / diameter;
 
@@ -53,7 +53,6 @@ public class BallController : IBallController
         for (var i = 0; i < number; i++)
         {
             var (gridX, gridY) = coordinates[i];
-            
 
 
             // fixed ball size
@@ -74,24 +73,23 @@ public class BallController : IBallController
                 random.NextDouble() + (double)random.Next(-1, 1),
                 mass
             );
-            
+
             _ballRepository.AddBall(ball);
             ball.OnChange += MoveBall;
         }
     }
-    
+
     public void MoveBalls()
     {
-        
         Barrier barrier = new Barrier(GetBalls().Count, (b) =>
         {
             OnChange?.Invoke();
-            Thread.Sleep(20);
+            Thread.Sleep(10);
         });
-        
+
         foreach (var ball in GetBalls())
         {
-             ball.MoveAsync(barrier); // Task.Run(() => ball.Move(barrier));
+            ball.MoveAsync(barrier); // Task.Run(() => ball.Move(barrier));
         }
     }
 
@@ -101,36 +99,47 @@ public class BallController : IBallController
         {
             var newXPosition = ball.XPosition + ball.XSpeed;
             var newYPosition = ball.YPosition + ball.YSpeed;
-    
-                
+
+
             foreach (var otherBall in GetBalls())
             {
                 if (ball.Id == otherBall.Id)
                 {
                     continue;
                 }
-                
+
                 double dx = newXPosition - otherBall.XPosition;
                 double dy = newYPosition - otherBall.YPosition;
                 double distance = Math.Sqrt(dx * dx + dy * dy);
-                
+
                 if (distance < ball.Diameter / 2 + otherBall.Diameter / 2)
                 {
-                     BallLogger.CollisionInfo collisionInfo = new BallLogger.CollisionInfo(ball.Id,
-                         newXPosition, newYPosition,
-                         otherBall.Id,
-                         otherBall.XPosition, otherBall.YPosition);
-                     //BallLogger.Log(collisionInfo);
-                    //Task.Run((() => BallLogger.Log(collisionInfo)));
-                    new Thread(() => BallLogger.Log(collisionInfo)).Start();
-                    
+                    ///////
+                    //Stopwatch stopwatch = new Stopwatch();
+                    //stopwatch.Start();
+                    //////
+
+                    BallLogger.CollisionInfo collisionInfo = new BallLogger.CollisionInfo(ball.Id,
+                        newXPosition, newYPosition,
+                        otherBall.Id,
+                        otherBall.XPosition, otherBall.YPosition);
+                    BallLogger.Log(collisionInfo);
+                    // Task.Run((() => BallLogger.Log(collisionInfo)));
+                    // new Thread(() => BallLogger.Log(collisionInfo)).Start();
+
+                    //////
+                    //stopwatch.Stop();
+                    //Console.WriteLine("Time elapsed: {0}", stopwatch.Elapsed);
+                    //////
+
                     // Calculate the angle
                     double angle = Math.Atan2(dy, dx);
-                
+
                     // Calculate the speed of the balls
                     double ballTotalVelocity = Math.Sqrt(ball.XSpeed * ball.XSpeed + ball.YSpeed * ball.YSpeed);
-                    double otherBallTotalVelocity = Math.Sqrt(otherBall.XSpeed * otherBall.XSpeed + otherBall.YSpeed * otherBall.YSpeed);
-                
+                    double otherBallTotalVelocity =
+                        Math.Sqrt(otherBall.XSpeed * otherBall.XSpeed + otherBall.YSpeed * otherBall.YSpeed);
+
                     // Calculate the speed of the balls taking into account the masses
                     double newBallXSpeed =
                         (ballTotalVelocity * (ball.Mass - otherBall.Mass) +
@@ -148,43 +157,43 @@ public class BallController : IBallController
                         (otherBallTotalVelocity * (otherBall.Mass - ball.Mass) +
                          2 * ball.Mass * ballTotalVelocity) / (ball.Mass + otherBall.Mass) *
                         Math.Sin(angle + Math.PI);
-    
+
                     // Update speed
                     ball.XSpeed = newBallXSpeed;
                     ball.YSpeed = newBallYSpeed;
                     otherBall.XSpeed = newOtherBallXSpeed;
                     otherBall.YSpeed = newOtherBallYSpeed;
-                
+
                     // Protection against making a move twice
                     double overlap = ball.Diameter / 2 + otherBall.Diameter / 2 - distance;
                     newXPosition += overlap * Math.Cos(angle);
                     newYPosition += overlap * Math.Sin(angle);
                 }
             }
-                 
+
             // Collision with the wall
             if (newYPosition <= 0)
             {
                 newYPosition = 0;
                 ball.YSpeed *= -1;
-            } 
+            }
             else if (newYPosition + ball.Diameter >= _height)
             {
                 newYPosition = _height - ball.Diameter;
                 ball.YSpeed *= -1;
             }
-    
+
             if (newXPosition <= 0)
             {
                 newXPosition = 0;
                 ball.XSpeed *= -1;
-            } 
+            }
             else if (newXPosition + ball.Diameter >= _width)
             {
                 newXPosition = _width - ball.Diameter;
                 ball.XSpeed *= -1;
             }
-    
+
             // Assigning a value after all calculations
             ball.XPosition = newXPosition;
             ball.YPosition = newYPosition;
@@ -200,7 +209,7 @@ public class BallController : IBallController
     {
         get => _width;
     }
-    
+
     public List<IBall> GetBalls()
     {
         return _ballRepository.GetBalls();
@@ -213,6 +222,7 @@ public class BallController : IBallController
             ball.IsMoving = false;
             ball.OnChange -= MoveBall;
         }
+
         _ballRepository.ClearAll();
     }
 }

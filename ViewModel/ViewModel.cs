@@ -40,7 +40,7 @@ public class ViewModel : INotifyPropertyChanged
         StartCommand = new RelayCommand(Start, () => IsStartEnable);
         StopCommand = new RelayCommand(Stop, () => IsStopEnable);
         _modelMain = new ModelMain(_width, _height);
-        _numberOfBalls = "50";
+        _numberOfBalls = "30";
 
         IsStartEnable = true;
         IsStopEnable = false;

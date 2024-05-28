@@ -97,7 +97,7 @@ public class BallController : IBallController
 
     private void MoveBall(IBall ball)
     {
-        //lock (_lock)
+        lock (_lock)
         {
             var newXPosition = ball.XPosition + ball.XSpeed;
             var newYPosition = ball.YPosition + ball.YSpeed;

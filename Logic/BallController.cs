@@ -86,7 +86,7 @@ public class BallController : IBallController
         Barrier barrier = new Barrier(GetBalls().Count, (b) =>
         {
             OnChange?.Invoke();
-            Thread.Sleep(20);
+            Thread.Sleep(10);
         });
         
         foreach (var ball in GetBalls())
@@ -171,6 +171,7 @@ public class BallController : IBallController
                     else
                     {
                         collisionAlreadyHandled = true;
+                        Console.WriteLine("Collision already handled");
                     }
                     
                     // double overlap = ball.Diameter / 2 + otherBall.Diameter / 2 - distance;

@@ -13,8 +13,8 @@ namespace Data
         private static Thread _logThread;
         private static bool _isRunning = false;
         private static readonly object _lock = new object();
-        private static bool LOG_TO_FILE = true;
-        private static bool LOG_TO_CONSOLE = true;
+        private static bool LOG_TO_FILE = false;
+        private static bool LOG_TO_CONSOLE = false;
         
         static BallLogger()
         {

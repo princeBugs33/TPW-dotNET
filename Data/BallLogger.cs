@@ -20,7 +20,18 @@ namespace Data
         {
             if (LOG_TO_FILE)
             {
-                File.WriteAllText(_logFilePath, "[]");
+                try
+                {
+                    File.WriteAllText(_logFilePath, "[]");
+
+                }
+                catch (Exception e)
+                {
+                    LOG_TO_FILE = false;
+                    Console.WriteLine($"An error occurred during log file preparation: {e.Message}");
+                    Console.WriteLine($"!!!Disabling log to file.");
+                }
+
                 // if (!File.Exists(_logFilePath))
                 // {
                 //     File.WriteAllText(_logFilePath, "[]");
@@ -87,10 +98,21 @@ namespace Data
                      // lines.Add("]");
                      //
                      // File.WriteAllLines(Path.Combine(LOG_FILE_PATH, LOG_FILE_NAME), lines);
-                     var lines = File.ReadAllText(_logFilePath);
-                     var jsonArray = JsonConvert.DeserializeObject<List<string>>(lines);
-                     jsonArray.Add(logMessage.ToJson());
-                     File.WriteAllText(_logFilePath, JsonConvert.SerializeObject(jsonArray));
+                     
+                     try
+                     {
+                         var lines = File.ReadAllText(_logFilePath);
+                         var jsonArray = JsonConvert.DeserializeObject<List<string>>(lines); 
+                         jsonArray.Add(logMessage.ToJson()); 
+                         File.WriteAllText(_logFilePath, JsonConvert.SerializeObject(jsonArray));
+                     }
+                     catch (Exception e)
+                     {
+                         LOG_TO_FILE = false;
+                         Console.WriteLine($"An error occurred log saving: {e.Message}");
+                         Console.WriteLine($"!!!Disabling log to file.");
+                     }
+
                  }
             }
 
@@ -99,15 +121,15 @@ namespace Data
 
         public class CollisionInfo
         {
-            public int Ball1Id { get; set; }
-            public double Ball1X { get; set; }
-            public double Ball1Y { get; set; }
+            public int Ball1Id { get; }
+            public double Ball1X { get; }
+            public double Ball1Y { get; }
 
-            public int Ball2Id { get; set; }
-            public double Ball2X { get; set; }
-            public double Ball2Y { get; set; }
+            public int Ball2Id { get; }
+            public double Ball2X { get; }
+            public double Ball2Y { get; }
 
-            public DateTime Timestamp { get; set; }
+            public DateTime Timestamp { get; }
 
             public CollisionInfo(int ball1Id, double ball1X, double ball1Y, int ball2Id, double ball2X, double ball2Y)
             {

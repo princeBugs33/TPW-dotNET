@@ -117,6 +117,14 @@ public class BallController : IBallController
                 
                 if (distance < ball.Diameter / 2 + otherBall.Diameter / 2)
                 {
+                     BallLogger.CollisionInfo collisionInfo = new BallLogger.CollisionInfo(ball.Id,
+                         newXPosition, newYPosition,
+                         otherBall.Id,
+                         otherBall.XPosition, otherBall.YPosition);
+                     //BallLogger.Log(collisionInfo);
+                    //Task.Run((() => BallLogger.Log(collisionInfo)));
+                    new Thread(() => BallLogger.Log(collisionInfo)).Start();
+                    
                     // Calculate the angle
                     double angle = Math.Atan2(dy, dx);
                 

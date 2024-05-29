@@ -1,5 +1,6 @@
 ﻿using Data;
 using System.Diagnostics;
+using static Data.BallLogger;
 
 namespace Logic;
 
@@ -64,7 +65,7 @@ public class BallController : IBallController
             double x = gridX * diameterMax + random.NextDouble() * (diameterMax - diameter);
             double y = gridY * diameterMax + random.NextDouble() * (diameterMax - diameter);*/
 
-            Ball ball = new Ball(
+            IBall ball = new Ball(
                 i,
                 x,
                 y,
@@ -171,27 +172,44 @@ public class BallController : IBallController
                 }
             }
 
+            
             // Collision with the wall
             if (newYPosition <= 0)
             {
                 newYPosition = 0;
                 ball.YSpeed *= -1;
+                BallLogger.ICollision collisionInfo1 = new BallLogger.CollisionInfoBoard(ball.Id,
+                        newXPosition, newYPosition,
+                        "up");
+                BallLogger.Log(collisionInfo1);
             }
             else if (newYPosition + ball.Diameter >= _height)
             {
                 newYPosition = _height - ball.Diameter;
                 ball.YSpeed *= -1;
+                BallLogger.ICollision collisionInfo1 = new BallLogger.CollisionInfoBoard(ball.Id,
+                        newXPosition, newYPosition,
+                        "down");
+                BallLogger.Log(collisionInfo1);
             }
 
             if (newXPosition <= 0)
             {
                 newXPosition = 0;
                 ball.XSpeed *= -1;
+                BallLogger.ICollision collisionInfo1 = new BallLogger.CollisionInfoBoard(ball.Id,
+                        newXPosition, newYPosition,
+                        "left");
+                BallLogger.Log(collisionInfo1);
             }
             else if (newXPosition + ball.Diameter >= _width)
             {
                 newXPosition = _width - ball.Diameter;
                 ball.XSpeed *= -1;
+                BallLogger.ICollision collisionInfo1 = new BallLogger.CollisionInfoBoard(ball.Id,
+                        newXPosition, newYPosition,
+                        "right");
+                BallLogger.Log(collisionInfo1);
             }
 
             // Assigning a value after all calculations

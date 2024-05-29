@@ -3,12 +3,13 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Threading;
 using Newtonsoft.Json;
+using static Data.BallLogger;
 
 namespace Data
 {
     public static class BallLogger
     {
-        private static readonly ConcurrentQueue<CollisionInfo> _logMessages = new ConcurrentQueue<CollisionInfo>();
+        private static readonly ConcurrentQueue<ICollision> _logMessages = new ConcurrentQueue<ICollision>();
         private static readonly string _logFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log.json");
         private static Thread _logThread;
         private static bool _isRunning = false;
@@ -35,12 +36,12 @@ namespace Data
             }
         }
 
-        public static void Log(CollisionInfo collisionInfo)
+        public static void Log(ICollision collisionInfo)
         {
             Task.Run((() => LogTo(collisionInfo)));
         }
         
-        public static void LogTo(CollisionInfo collisionInfo)
+        public static void LogTo(ICollision collisionInfo)
         {
 
             if (LOG_TO_CONSOLE || LOG_TO_FILE)
@@ -92,7 +93,14 @@ namespace Data
             _isRunning = false;
         }
 
-        public class CollisionInfo
+        public interface ICollision
+        {
+            public string ToString();
+
+            public string ToJson();
+        }
+
+        public class CollisionInfo : ICollision
         {
             public int Ball1Id { get; }
             public double Ball1X { get; }
@@ -118,6 +126,35 @@ namespace Data
             public override string ToString()
             {
                 return $"Timestamp: {Timestamp:O}, Collision between Ball {Ball1Id} at ({Ball1X:F2}, {Ball1Y:F2}) and Ball {Ball2Id} at ({Ball2X:F2}, {Ball2Y:F2})";
+            }
+
+            public string ToJson()
+            {
+                return JsonConvert.SerializeObject(this);
+            }
+        }
+
+        public class CollisionInfoBoard : ICollision
+        {
+            public int Ball1Id { get; }
+            public double Ball1X { get; }
+            public double Ball1Y { get; }
+            public string Wall { get; }
+
+            public DateTime Timestamp { get; }
+
+            public CollisionInfoBoard(int ball1Id, double ball1X, double ball1Y, string wall)
+            {
+                Ball1Id = ball1Id;
+                Ball1X = ball1X;
+                Ball1Y = ball1Y;
+                Wall = wall;
+                Timestamp = DateTime.Now;
+            }
+
+            public override string ToString()
+            {
+                return $"Timestamp: {Timestamp:O}, Collision between Ball {Ball1Id} at ({Ball1X:F2}, {Ball1Y:F2}) and wall {Wall:F2}";
             }
 
             public string ToJson()
